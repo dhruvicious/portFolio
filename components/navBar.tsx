@@ -3,15 +3,13 @@
 import Logo from "@/components/logo";
 import ModeToggle from "@/components/themeSwitch";
 import Link from "next/link";
-import {
-	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuContent,
-	DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
 
 const navButtonClass =
-	"px-3 sm:px-4 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm font-medium";
+	"px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 " +
+	"bg-white/70 dark:bg-gray-800/70 hover:bg-white/90 dark:hover:bg-gray-700/90 " +
+	"text-gray-800 dark:text-gray-200 shadow-sm hover:shadow-md " +
+	"border border-transparent hover:border-gray-300 dark:hover:border-gray-600 " +
+	"transform hover:-translate-y-0.5 active:translate-y-0";
 
 export default function NavBar() {
 	return (
@@ -28,37 +26,12 @@ export default function NavBar() {
 					<Link href="/projects" className={navButtonClass}>
 						<span>Projects</span>
 					</Link>
-
-					{/* Contact Dropdown */}
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<button className={navButtonClass}>Contact</button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end" className="w-40 z-50">
-							<DropdownMenuItem asChild>
-								<Link href="mailto:dhruvkhatri1234@gmail.com">
-									Email
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem asChild>
-								<Link
-									href="https://linkedin.com/in/thehalfbldprinc3"
-									target="_blank"
-								>
-									LinkedIn
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem asChild>
-								<Link
-									href="https://github.com/dhruvicious"
-									target="_blank"
-								>
-									GitHub
-								</Link>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-
+					<Link
+						href="mailto:dhruvkhatri1234@gmail.com"
+						className={navButtonClass}
+					>
+						<span>E-mail</span>
+					</Link>
 					<div className="relative z-50">
 						<ModeToggle />
 					</div>

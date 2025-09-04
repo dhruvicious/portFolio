@@ -46,7 +46,7 @@ export default function LogoWithName() {
 				{/* Name + Designation */}
 				<div className="flex flex-col items-center sm:items-start text-center sm:text-left min-w-0 flex-1">
 					<TypeAnimation
-						sequence={["Hello! My name is..."]}
+						sequence={["Hey there! I'm ..."]}
 						wrapper="span"
 						cursor={false}
 						repeat={0}
