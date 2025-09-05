@@ -7,6 +7,11 @@ const ResizingSquares: React.FC = () => {
 	const [hoveredSquare, setHoveredSquare] = useState<SquarePosition | null>(
 		null
 	);
+	const [isEntranceAnimating, setIsEntranceAnimating] = useState(false);
+	const [currentAnimatingSquare, setCurrentAnimatingSquare] =
+		useState<SquarePosition | null>(null);
+	const [hasAnimated, setHasAnimated] = useState(false);
+
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [containerSize, setContainerSize] = useState<{
 		width: number;
@@ -28,6 +33,58 @@ const ResizingSquares: React.FC = () => {
 		window.addEventListener("resize", updateSize);
 		return () => window.removeEventListener("resize", updateSize);
 	}, []);
+
+	// Intersection Observer for entrance animation
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting && !hasAnimated) {
+						startEntranceAnimation();
+					}
+				});
+			},
+			{ threshold: 0.5 }
+		);
+
+		if (containerRef.current) {
+			observer.observe(containerRef.current);
+		}
+
+		return () => observer.disconnect();
+	}, [hasAnimated]);
+
+	const startEntranceAnimation = () => {
+		if (hasAnimated) return;
+
+		setIsEntranceAnimating(true);
+		const squares: SquarePosition[] = [
+			"top-left",
+			"top-right",
+			"bottom-left",
+			"bottom-right",
+		];
+
+		// Animate each square in sequence
+		squares.forEach((square, index) => {
+			setTimeout(() => {
+				setCurrentAnimatingSquare(square);
+
+				// Shrink back after expansion
+				setTimeout(() => {
+					setCurrentAnimatingSquare(null);
+
+					// If this is the last square, end the entrance animation
+					if (index === squares.length - 1) {
+						setTimeout(() => {
+							setIsEntranceAnimating(false);
+							setHasAnimated(true);
+						}, 300); // Wait for the shrink animation to complete
+					}
+				}, 400); // Each square stays expanded for 400ms
+			}, index * 200); // 200ms delay between each square
+		});
+	};
 
 	const socialLinks: Record<
 		SquarePosition,
@@ -61,7 +118,80 @@ const ResizingSquares: React.FC = () => {
 		let left = position.includes("right") ? 50 : 0;
 		let top = position.includes("bottom") ? 50 : 0;
 
-		if (hoveredSquare) {
+		// During entrance animation, apply the same logic as hover but for the animating square
+		if (isEntranceAnimating && currentAnimatingSquare) {
+			switch (currentAnimatingSquare) {
+				case "top-left":
+					if (position === "top-left") width = height = expanded;
+					else if (position === "top-right") {
+						width = shrunk;
+						height = expanded;
+						left = expanded;
+					} else if (position === "bottom-left") {
+						width = expanded;
+						height = shrunk;
+						top = expanded;
+					} else {
+						width = height = shrunk;
+						left = expanded;
+						top = expanded;
+					}
+					break;
+				case "top-right":
+					if (position === "top-right") {
+						width = height = expanded;
+						left = shrunk;
+					} else if (position === "top-left") {
+						width = shrunk;
+						height = expanded;
+					} else if (position === "bottom-right") {
+						width = expanded;
+						height = shrunk;
+						left = shrunk;
+						top = expanded;
+					} else {
+						width = height = shrunk;
+						top = expanded;
+					}
+					break;
+				case "bottom-left":
+					if (position === "bottom-left") {
+						width = height = expanded;
+						top = shrunk;
+					} else if (position === "bottom-right") {
+						width = shrunk;
+						height = expanded;
+						left = expanded;
+						top = shrunk;
+					} else if (position === "top-left") {
+						width = expanded;
+						height = shrunk;
+					} else {
+						width = height = shrunk;
+						left = expanded;
+					}
+					break;
+				case "bottom-right":
+					if (position === "bottom-right") {
+						width = height = expanded;
+						left = shrunk;
+						top = shrunk;
+					} else if (position === "bottom-left") {
+						width = shrunk;
+						height = expanded;
+						top = shrunk;
+					} else if (position === "top-right") {
+						width = expanded;
+						height = shrunk;
+						left = shrunk;
+					} else {
+						width = height = shrunk;
+					}
+					break;
+			}
+		}
+		// Normal hover logic (only when not in entrance animation)
+		else if (!isEntranceAnimating && hoveredSquare) {
 			switch (hoveredSquare) {
 				case "top-left":
 					if (position === "top-left") width = height = expanded;
@@ -165,7 +295,7 @@ const ResizingSquares: React.FC = () => {
 		<div
 			ref={containerRef}
 			className="relative w-full h-full overflow-hidden"
-			onMouseLeave={() => setHoveredSquare(null)}
+			onMouseLeave={() => !isEntranceAnimating && setHoveredSquare(null)}
 		>
 			{(
 				[
@@ -186,13 +316,15 @@ const ResizingSquares: React.FC = () => {
 							position
 						)} cursor-pointer hover:shadow-lg`}
 						style={getSquareStyle(position)}
-						onMouseEnter={() => setHoveredSquare(position)}
+						onMouseEnter={() =>
+							!isEntranceAnimating && setHoveredSquare(position)
+						}
 					>
 						<img
 							src={socialLinks[position].svgPath}
 							alt={`${position} icon`}
 							style={{ width: "50%", height: "50%" }}
-							className="object-contain transition-all duration-300"
+							className="select-none object-contain transition-all duration-300"
 						/>
 					</div>
 				</a>

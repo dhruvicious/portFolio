@@ -32,7 +32,7 @@ export default function NavBar() {
 					>
 						<span>E-mail</span>
 					</Link>
-					<div className="relative z-50">
+					<div className="relative z-50 w-10 h-10 flex items-center justify-center">
 						<ModeToggle />
 					</div>
 				</div>

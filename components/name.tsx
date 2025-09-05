@@ -13,7 +13,7 @@ export default function LogoWithName() {
 	}, []);
 
 	return (
-		<div className="flex justify-center w-full h-full">
+		<div className="flex justify-center items-center w-full h-full">
 			<div className="flex items-center gap-[clamp(0.5rem,4vw,4rem)] flex-col sm:flex-row text-center sm:text-left">
 				{/* Flip Logo */}
 				<div className="group [perspective:1000px] aspect-square w-[clamp(4rem,15vw,16rem)] min-w-[4rem] shrink-0">
