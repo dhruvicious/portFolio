@@ -32,17 +32,30 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					{/* Video background */}
+					{/* Light mode video */}
 					<video
 						autoPlay
-						loop // ensures infinite loop
+						loop
 						muted
 						playsInline
-						className="fixed top-0 left-0 w-full h-full object-cover z-0 filter blur-xl opacity-50"
+						className="fixed top-0 left-0 w-full h-full object-cover z-0 filter blur-xl opacity-50 dark:hidden"
+					>
+						<source src="/background-light.mp4" type="video/mp4" />
+						Your browser does not support the video tag.
+					</video>
+
+					{/* Dark mode video */}
+					<video
+						autoPlay
+						loop
+						muted
+						playsInline
+						className="fixed top-0 left-0 w-full h-full object-cover z-0 filter blur-xl opacity-50 hidden dark:block"
 					>
 						<source src="/background.mp4" type="video/mp4" />
 						Your browser does not support the video tag.
 					</video>
+
 					{/* Main content */}
 					<div className="relative flex flex-col min-h-screen w-full max-w-full z-10 bg-transparent text-black dark:text-white">
 						{children}
