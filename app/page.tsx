@@ -1,7 +1,7 @@
 import Name from "@/components/name";
 import NavBar from "@/components/navBar";
 import Footer from "@/components/footer";
-import ResizingSquares from "@/components/social/socials";
+import ResizingSquares from "@/components/socials";
 import AboutMe from "@/components/aboutMe";
 
 export default function Home() {
