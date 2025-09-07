@@ -65,13 +65,10 @@
 // 		</html>
 // 	);
 // }
-
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/themeProvider";
-import Image from "next/image";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -102,23 +99,10 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					{/* Light mode background */}
-					<Image
-						src="/background-light.jpg"
-						alt="Background Light"
-						fill
-						priority
-						className="fixed top-0 left-0 w-full h-full object-cover z-0 filter blur-xl opacity-50 dark:hidden"
-					/>
-
-					{/* Dark mode background */}
-					<Image
-						src="/background.png"
-						alt="Background Dark"
-						fill
-						priority
-						className="fixed top-0 left-0 w-full h-full object-cover z-0 filter blur-xl opacity-50 hidden dark:block"
-					/>
+					{/* Background layer */}
+					<div className="fixed inset-0 -z-10">
+						<div className="absolute inset-0 bg-[url('/background-light.png')] dark:bg-[url('/background.png')] bg-cover bg-center filter blur-xl opacity-50"></div>
+					</div>
 
 					{/* Main content */}
 					<div className="relative flex flex-col min-h-screen w-full max-w-full z-10 bg-transparent text-black dark:text-white">
