@@ -39,7 +39,7 @@ async function fetchWithAuth<T>(url: string): Promise<T> {
 
 export async function GET(req: Request) {
 	const origin = req.headers.get("origin") || req.headers.get("referer");
-	if (!origin || !origin.startsWith(ALLOWED_ORIGIN)) {
+	if (!origin || !origin.includes(ALLOWED_ORIGIN)) {
 		return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 	}
 
