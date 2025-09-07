@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 
 const GITHUB_API = "https://api.github.com";
-const ALLOWED_ORIGIN =
-	process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const ALLOWED_ORIGIN = "bedhruvicious.co.in"
 
 // GitHub API response types
 interface GitHubProfile {
