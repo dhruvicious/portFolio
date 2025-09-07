@@ -44,7 +44,7 @@ export default function AboutMe(): JSX.Element {
 						cursor={false}
 						speed={10}
 						repeat={1}
-						className="select-none font-light text-black dark:text-white text-4xl md:text-5xl"
+						className="select-none text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-wide text-foreground select-none"
 					/>
 				) : (
 					<span className="opacity-0">About Me</span>
