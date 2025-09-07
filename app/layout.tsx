@@ -101,7 +101,7 @@ export default function RootLayout({
 				>
 					{/* Background layer */}
 					<div className="fixed inset-0 -z-10">
-						<div className="absolute inset-0 bg-[url('/background-light.png')] dark:bg-[url('/background.png')] bg-cover bg-center filter blur-xl opacity-50"></div>
+						<div className="absolute inset-0 bg-[url('/background-light.jpg')] dark:bg-[url('/background.png')] bg-cover bg-center filter blur-xl opacity-50"></div>
 					</div>
 
 					{/* Main content */}
