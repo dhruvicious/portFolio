@@ -17,22 +17,22 @@ export default function Home() {
 			</section>
 
 			{/* Bio Section */}
-			<section className="bio min-h-screen w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
-				{/* Grid with About Me + Socials */}
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-full w-full">
-					{/* About Me spans 2 cols on large screens */}
-					<div className="tile flex flex-col items-center justify-center min-h-[300px] lg:col-span-2">
+			<section className="bio min-h-screen w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12 flex flex-col gap-6">
+				{/* About Me + Socials flex container */}
+				<div className="flex flex-col lg:flex-row gap-6 w-full">
+					{/* About Me */}
+					<div className="flex-1 flex flex-col items-center justify-center min-h-[300px]">
 						<AboutMe />
 					</div>
 
 					{/* Socials */}
-					<div className="tile flex flex-col justify-center shadow-md min-h-[300px]">
+					<div className="flex-1 flex flex-col justify-center shadow-md min-h-[300px] relative">
 						<ResizingSquares />
 					</div>
 				</div>
 
 				{/* GitHub Dashboard */}
-				<div className="flex flex-col justify-center min-h-full w-full mt-10">
+				<div className="flex flex-col justify-center min-h-[300px] mt-10 w-full">
 					<div className="mt-6 mb-4">
 						<Subheading name="Github Stats" />
 					</div>

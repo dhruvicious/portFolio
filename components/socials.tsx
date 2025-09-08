@@ -17,9 +17,7 @@ const ResizingSquares: React.FC = () => {
 	useEffect(() => {
 		const updateSize = () => {
 			if (containerRef.current) {
-				const { width, height } =
-					containerRef.current.getBoundingClientRect();
-				// Currently not used, but can be useful for responsive tweaks
+				containerRef.current.getBoundingClientRect();
 			}
 		};
 		updateSize();
@@ -45,7 +43,6 @@ const ResizingSquares: React.FC = () => {
 
 	const startEntranceAnimation = () => {
 		if (hasAnimated) return;
-
 		setIsEntranceAnimating(true);
 		const squares: SquarePosition[] = [
 			"top-left",
@@ -53,7 +50,6 @@ const ResizingSquares: React.FC = () => {
 			"bottom-left",
 			"bottom-right",
 		];
-
 		squares.forEach((square, index) => {
 			setTimeout(() => {
 				setCurrentAnimatingSquare(square);
@@ -93,15 +89,13 @@ const ResizingSquares: React.FC = () => {
 	};
 
 	const getSquareStyle = (position: SquarePosition): CSSProperties => {
-		const normal = 50;
-		const expanded = 70;
-		const shrunk = 30;
-
-		let width = normal;
-		let height = normal;
-		let left = position.includes("right") ? 50 : 0;
-		let top = position.includes("bottom") ? 50 : 0;
-
+		const normal = 50,
+			expanded = 70,
+			shrunk = 30;
+		let width = normal,
+			height = normal,
+			left = position.includes("right") ? 50 : 0,
+			top = position.includes("bottom") ? 50 : 0;
 		const animateLogic = currentAnimatingSquare || hoveredSquare;
 		if (animateLogic) {
 			switch (animateLogic) {
@@ -174,7 +168,6 @@ const ResizingSquares: React.FC = () => {
 					break;
 			}
 		}
-
 		return {
 			position: "absolute",
 			left: `${left}%`,
@@ -203,10 +196,40 @@ const ResizingSquares: React.FC = () => {
 		}
 	};
 
+	// Local state to track parallax transforms
+	const [parallaxTransforms, setParallaxTransforms] = useState<
+		Record<SquarePosition, string>
+	>({
+		"top-left": "translate(0px, 0px)",
+		"top-right": "translate(0px, 0px)",
+		"bottom-left": "translate(0px, 0px)",
+		"bottom-right": "translate(0px, 0px)",
+	});
+
+	const handleMouseMove = (
+		e: React.MouseEvent<HTMLDivElement>,
+		position: SquarePosition
+	) => {
+		const rect = e.currentTarget.getBoundingClientRect();
+		const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20; // max ±10px
+		const y = ((e.clientY - rect.top) / rect.height - 0.5) * 20;
+		setParallaxTransforms((prev) => ({
+			...prev,
+			[position]: `translate(${x}px, ${y}px)`,
+		}));
+	};
+
+	const resetParallax = (position: SquarePosition) => {
+		setParallaxTransforms((prev) => ({
+			...prev,
+			[position]: "translate(0px, 0px)",
+		}));
+	};
+
 	return (
 		<div
 			ref={containerRef}
-			className="relative w-full h-full overflow-hidden"
+			className="w-full h-full overflow-hidden"
 			onMouseLeave={() => !isEntranceAnimating && setHoveredSquare(null)}
 		>
 			{(
@@ -231,12 +254,19 @@ const ResizingSquares: React.FC = () => {
 						onMouseEnter={() =>
 							!isEntranceAnimating && setHoveredSquare(position)
 						}
+						onMouseMove={(e) => handleMouseMove(e, position)}
+						onMouseLeave={() => resetParallax(position)}
 					>
 						<img
 							src={socialLinks[position].svgPath}
 							alt={`${position} icon`}
-							style={{ width: "50%", height: "50%" }}
-							className="select-none object-contain transition-all duration-300 filter brightness-125"
+							style={{
+								width: "50%",
+								height: "50%",
+								transform: parallaxTransforms[position],
+								transition: "transform 0.1s ease-out",
+							}}
+							className="select-none object-contain filter brightness-125"
 						/>
 					</div>
 				</a>

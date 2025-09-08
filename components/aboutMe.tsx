@@ -1,80 +1,89 @@
 "use client";
-import { JSX, useEffect, useRef, useState } from "react";
-import { TypeAnimation } from "react-type-animation";
+import React, { JSX, useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 export default function AboutMe(): JSX.Element {
-	const containerRef = useRef<HTMLDivElement>(null);
-	const [visible, setVisible] = useState(false);
+	const containerRef = useRef<HTMLDivElement | null>(null);
+	const headingRef = useRef<HTMLHeadingElement | null>(null);
+	const paraRef = useRef<HTMLDivElement | null>(null);
 
-	const paragraph: string = `I'm Dhruv, an Electronics and Communications engineering student with a passion for building both hardware and software projects that deepen my understanding of how things work. My portfolio spans full-stack applications like a voice-controlled SmartMirror, which combines hardware and software, a book review API, and even toy projects like numNet, a tiny deep learning framework built with NumPy just to see how neural networks function under the hood. I've also created classics like a C++ Snake game and a web-based tripleArcade. Each project reflects a hands-on, curiosity-driven approach to learning and creating.`;
+	const paragraph: string = `I’m Dhruv, an ECE student who can’t resist poking at things, whether hardware, software, or just ideas, to see what happens. Curious, hands-on, and stubborn in the best way, I tinker until things behave or spectacularly don’t. I approach learning with a mix of mischief and obsession. If it can be broken, optimized, or overthought, I’m on it. Mostly, I like building stuff that makes sense of the world or at least makes me laugh along the way.`;
 
 	useEffect(() => {
-		if (!containerRef.current) return;
+		const container = containerRef.current;
+		if (!container) return;
 
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						setVisible(true);
-						observer.disconnect();
-					}
-				});
-			},
-			{ threshold: 0.3 }
-		);
+		container.style.perspective = "1000px";
 
-		observer.observe(containerRef.current);
+		const handleMouse = (e: MouseEvent) => {
+			const rect = container.getBoundingClientRect();
+			const x = (e.clientX - rect.left) / rect.width - 0.5;
+			const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-		return () => observer.disconnect();
+			gsap.to(container, {
+				rotationY: x * 10,
+				rotationX: -y * 10,
+				transformOrigin: "center",
+				ease: "power2.out",
+				duration: 0.5,
+			});
+
+			gsap.to(headingRef.current, {
+				x: x * 20,
+				y: y * 10,
+				duration: 0.5,
+				ease: "power2.out",
+			});
+
+			gsap.to(paraRef.current, {
+				x: x * -15,
+				y: y * -10,
+				duration: 0.5,
+				ease: "power2.out",
+			});
+		};
+
+		const resetTilt = () => {
+			gsap.to([container, headingRef.current, paraRef.current], {
+				rotationX: 0,
+				rotationY: 0,
+				x: 0,
+				y: 0,
+				duration: 0.6,
+				ease: "power2.out",
+			});
+		};
+
+		container.addEventListener("mousemove", handleMouse);
+		container.addEventListener("mouseleave", resetTilt);
+
+		return () => {
+			container.removeEventListener("mousemove", handleMouse);
+			container.removeEventListener("mouseleave", resetTilt);
+		};
 	}, []);
 
 	return (
-		<div ref={containerRef} className="w-full">
+		<div
+			ref={containerRef}
+			className="relative w-full p-6 rounded-2xl bg-white/5 dark:bg-slate-900/40"
+		>
 			<h2
-				className="mb-6 tracking-tight"
-				style={{
-					fontFamily: "Inter, system-ui, sans-serif",
-					letterSpacing: "-0.025em",
-				}}
+				ref={headingRef}
+				className="mb-6 select-none text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground"
 			>
-				{visible ? (
-					<TypeAnimation
-						sequence={["About Me"]}
-						wrapper="span"
-						cursor={false}
-						speed={10}
-						repeat={1}
-						className="select-none text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-wide text-foreground select-none"
-					/>
-				) : (
-					<span className="opacity-0">About Me</span>
-				)}
+				About Me
 			</h2>
 
-			{/* Reserved space for paragraph */}
 			<div
-				className="select-none text-lg md:text-xl leading-8 text-gray-700 dark:text-gray-300 mb-10 text-justify min-h-[14rem]"
-				style={{
-					fontFamily: "Inter, system-ui, sans-serif",
-					fontWeight: "400",
-					letterSpacing: "-0.01em",
-				}}
+				ref={paraRef}
+				className="select-none text-base md:text-lg leading-7 text-gray-700 dark:text-gray-300 mb-10 text-justify"
 			>
-				{visible ? (
-					<TypeAnimation
-						sequence={[paragraph]}
-						wrapper="span"
-						cursor={false}
-						speed={99}
-						repeat={1}
-					/>
-				) : (
-					<span className="opacity-0">{paragraph}</span> // placeholder to hold space
-				)}
+				{paragraph}
 			</div>
 
 			<div className="flex">
-				<div className="h-px w-16 bg-black dark:bg-white" />
+				<div className="h-px w-20 bg-black/80 dark:bg-white/80" />
 			</div>
 		</div>
 	);
