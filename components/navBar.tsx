@@ -3,7 +3,7 @@
 import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { FolderGit2, Mail, Menu } from "lucide-react";
+import { FolderGit2, Menu, PenSquare } from "lucide-react";
 import Logo from "@/components/logo";
 import ModeToggle from "@/components/themeSwitch";
 
@@ -29,7 +29,7 @@ export default function NavBar() {
   };
 
   return (
-    <div className="fixed top-6 w-full z-50 flex justify-center px-4">
+    <div className="fixed bottom-6 w-full z-50 flex justify-center px-4">
       <motion.nav
         layout
         transition={iosSpring}
@@ -85,9 +85,9 @@ export default function NavBar() {
                     label="Projects"
                   />
                   <NavItem
-                    href="mailto:dhruvkhatri1234@gmail.com"
-                    icon={<Mail size={18} />}
-                    label="Contact"
+                    href="https://writes.bedhruvicious.co.in"
+                    icon={<PenSquare size={18} />}
+                    label="Blog"
                   />
                 </div>
 

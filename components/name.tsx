@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
+import { Fira_Code } from "next/font/google";
+
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"], // Load a few weights for variety
+});
 
 export default function LogoWithName() {
   const [showDesignation, setShowDesignation] = useState(false);
@@ -13,7 +19,7 @@ export default function LogoWithName() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center w-full h-full">
+    <div className={`flex justify-center items-center w-full h-full`}>
       <div className="flex items-center gap-[clamp(0.5rem,4vw,4rem)] flex-col sm:flex-row text-center sm:text-left">
         {/* Flip Logo */}
         <div className="group [perspective:1000px] aspect-square w-[clamp(4rem,15vw,16rem)] min-w-[4rem] shrink-0">
@@ -53,7 +59,7 @@ export default function LogoWithName() {
             className="select-none font-semibold text-gray-600 dark:text-gray-300 tracking-wide leading-snug text-[clamp(1rem,2.5vw,2.5rem)] sm:text-[clamp(1.25rem,3vw,2.5rem)] lg:text-[clamp(1.5rem,3.5vw,2.5rem)]"
           />
           <TypeAnimation
-            sequence={["Dhruv Khatri"]}
+            sequence={["{Dhruv Khatri}"]}
             wrapper="span"
             cursor={false}
             repeat={1}
