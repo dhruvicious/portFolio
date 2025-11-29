@@ -3,7 +3,7 @@
 import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { FolderGit2, Menu, PenSquare } from "lucide-react";
+import { FileText, FolderGit2, Menu, PenSquare } from "lucide-react";
 import Logo from "@/components/logo";
 import ModeToggle from "@/components/themeSwitch";
 
@@ -89,6 +89,15 @@ export default function NavBar() {
                     icon={<PenSquare size={18} />}
                     label="Blog"
                   />
+                  <a
+                    href="/resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-medium text-neutral-600 dark:text-neutral-400 transition-all duration-300 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white"
+                  >
+                    <FileText size={18} />
+                    Resume
+                  </a>
                 </div>
 
                 {/* Separator */}
