@@ -42,10 +42,10 @@ export default function NavBar() {
         }}
         className="
             relative flex items-center gap-2 p-2
-            bg-white/80 dark:bg-[#121212]/80 
+            bg-white/80 dark:bg-[#121212]/80
             backdrop-blur-xl backdrop-saturate-150
             ring-1 ring-black/5 dark:ring-white/10
-            shadow-[0px_4px_8px_-2px_rgba(0,0,0,0.1),0px_8px_20px_-2px_rgba(0,0,0,0.1)] 
+            shadow-[0px_4px_8px_-2px_rgba(0,0,0,0.1),0px_8px_20px_-2px_rgba(0,0,0,0.1)]
             dark:shadow-[0px_4px_20px_-2px_rgba(0,0,0,0.5)]
             cursor-pointer group rounded-full
             h-16 transform-gpu
@@ -85,7 +85,7 @@ export default function NavBar() {
                     label="Projects"
                   />
                   <NavItem
-                    href="https://writes.bedhruvicious.co.in"
+                    href="https://blog.bedhruvicious.co.in"
                     icon={<PenSquare size={18} />}
                     label="Blog"
                   />
@@ -115,8 +115,8 @@ export default function NavBar() {
         >
           <div
             className="
-            flex items-center justify-center 
-            w-12 h-12 rounded-full 
+            flex items-center justify-center
+            w-12 h-12 rounded-full
             bg-neutral-100/80 dark:bg-neutral-800/80
             hover:bg-neutral-200/80 dark:hover:bg-neutral-700/80
             transition-colors duration-300
