@@ -3,7 +3,7 @@
 import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, FolderGit2, Menu, PenSquare } from "lucide-react";
+import { FileText, FolderGit2, Linkedin, Menu, PenSquare } from "lucide-react";
 import Logo from "@/components/logo";
 import ModeToggle from "@/components/themeSwitch";
 
@@ -80,11 +80,6 @@ export default function NavBar() {
 
                 <div className="flex items-center gap-1">
                   <NavItem
-                    href="/projects"
-                    icon={<FolderGit2 size={18} />}
-                    label="Projects"
-                  />
-                  <NavItem
                     href="https://blog.bedhruvicious.co.in"
                     icon={<PenSquare size={18} />}
                     label="Blog"
@@ -98,6 +93,16 @@ export default function NavBar() {
                     <FileText size={18} />
                     Resume
                   </a>
+                  <NavItem
+                    href="https://github.com/dhruvicious"
+                    icon={<FolderGit2 size={18} />}
+                    label="Github"
+                  />
+                  <NavItem
+                    href="https://www.linkedin.com/in/bedhruvicious/"
+                    icon={<Linkedin size={18} />}
+                    label="LinkedIn"
+                  />
                 </div>
 
                 {/* Separator */}
