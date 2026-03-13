@@ -22,10 +22,10 @@ export default function LogoWithName() {
     <div className={`flex justify-center items-center w-full h-full`}>
       <div className="flex items-center gap-[clamp(0.5rem,4vw,4rem)] flex-col sm:flex-row text-center sm:text-left">
         {/* Flip Logo */}
-        <div className="group [perspective:1000px] aspect-square w-[clamp(4rem,15vw,16rem)] min-w-[4rem] shrink-0">
-          <div className="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+        <div className="group perspective-[1000px] aspect-square w-[clamp(4rem,15vw,16rem)] min-w-16 shrink-0">
+          <div className="relative w-full h-full transition-transform duration-700 transform-3d group-hover:transform-[rotateY(180deg)]">
             {/* Front */}
-            <div className="absolute inset-0 flex items-center justify-center bg-background border border-muted rounded-2xl overflow-hidden [backface-visibility:hidden]">
+            <div className="absolute inset-0 flex items-center justify-center bg-background border border-muted rounded-2xl overflow-hidden backface-hidden">
               <Image
                 src="/alt.jpg"
                 alt="Dhruv Khatri"
@@ -36,7 +36,7 @@ export default function LogoWithName() {
               />
             </div>
             {/* Back */}
-            <div className="absolute inset-0 [transform:rotateY(180deg)] [backface-visibility:hidden] rounded-2xl overflow-hidden">
+            <div className="absolute inset-0 transform-[rotateY(180deg)] backface-hidden rounded-2xl overflow-hidden">
               <Image
                 src="/me-new.jpg"
                 alt="Dhruv Khatri"
