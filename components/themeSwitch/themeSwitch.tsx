@@ -9,12 +9,29 @@ import styles from "./themeSwitch.module.css";
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
 
   React.useEffect(() => setMounted(true), []);
+
   if (!mounted) return null;
 
   const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+
+    const targetTheme = theme === "light" ? "dark" : "light";
+
+    const event = new CustomEvent("theme-sweep-trigger", {
+      detail: {
+        targetTheme,
+        toggle: () => setTheme(targetTheme),
+      },
+    });
+    window.dispatchEvent(event);
+
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 1000); // match sweep animation duration
   };
 
   return (

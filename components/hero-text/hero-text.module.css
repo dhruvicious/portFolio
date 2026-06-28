@@ -16,7 +16,7 @@
 
 .greetingText {
   user-select: none;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-gray-600, #4b5563);
   letter-spacing: 0.025em;
   line-height: 1.375;
@@ -60,7 +60,7 @@
 
 .designationText {
   user-select: none;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-gray-600, #4b5563);
   letter-spacing: 0.025em;
   line-height: 1.375;

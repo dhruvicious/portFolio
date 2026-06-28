@@ -9,7 +9,7 @@ export function FlipAvatar() {
       <div className={styles.avatarInner}>
         <div className={styles.frontFace}>
           <Image
-            src="/alt.jpg"
+            src="/alt.avif"
             alt="Dhruv Khatri"
             fill
             className={styles.image}
@@ -19,7 +19,7 @@ export function FlipAvatar() {
         </div>
         <div className={styles.backFace}>
           <Image
-            src="/me-new.jpeg"
+            src="/me-new.avif"
             alt="Dhruv Khatri"
             fill
             className={styles.image}

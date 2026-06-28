@@ -1,11 +1,18 @@
 "use client";
 
 import { animate, svg, stagger } from "animejs";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 import styles from "./animated-svg-name.module.css";
 
 export function AnimatedSvgName() {
   const isAnimating = useRef(false);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // Prevent strict mode double animation
@@ -28,6 +35,35 @@ export function AnimatedSvgName() {
       },
     });
   }, []);
+
+  // Fallback defaults (matches light mode)
+  let stopColors = {
+    stop1: "#CC76A1", // dusty rose
+    stop2: "#7B2E58", // plum magenta
+    stop3: "#45122F", // dark magenta
+    stop4: "#22031F", // deep eggplant
+    stop5: "#0F010E", // near black
+  };
+
+  if (mounted && resolvedTheme === "dark") {
+    // Dark mode: Original blue-ish gradient
+    stopColors = {
+      stop1: "#0F1B4C",
+      stop2: "#4A6FA5",
+      stop3: "#C8D8E8",
+      stop4: "#2EC4C4",
+      stop5: "#0D3B6E",
+    };
+  } else if (mounted && resolvedTheme === "light") {
+    // Light mode: Cozy pink-to-dark gradient
+    stopColors = {
+      stop1: "#CC76A1", // dusty rose
+      stop2: "#7B2E58", // plum magenta
+      stop3: "#45122F", // dark magenta
+      stop4: "#22031F", // deep eggplant
+      stop5: "#0F010E", // near black
+    };
+  }
 
   return (
     <div className={styles.svgWrapper}>
@@ -116,11 +152,11 @@ export function AnimatedSvgName() {
             y2="51.1113"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#0F1B4C" />
-            <stop offset="0.25" stopColor="#4A6FA5" />
-            <stop offset="0.5" stopColor="#C8D8E8" />
-            <stop offset="0.75" stopColor="#2EC4C4" />
-            <stop offset="1" stopColor="#0D3B6E" />
+            <stop stopColor={stopColors.stop1} />
+            <stop offset="0.25" stopColor={stopColors.stop2} />
+            <stop offset="0.5" stopColor={stopColors.stop3} />
+            <stop offset="0.75" stopColor={stopColors.stop4} />
+            <stop offset="1" stopColor={stopColors.stop5} />
           </linearGradient>
         </defs>
       </svg>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { AnimatedSvgName } from "@/components/animated-svg-name/animated-svg-name";
+import { cormorantGaramond } from "@/lib/fonts";
 import styles from "./hero-text.module.css";
 
 export function HeroText() {
@@ -14,7 +15,7 @@ export function HeroText() {
   }, []);
 
   return (
-    <div className={styles.heroTextContainer}>
+    <div className={`${styles.heroTextContainer} ${cormorantGaramond.className}`}>
       <TypeAnimation
         sequence={["Hey there! I'm ..."]}
         wrapper="span"

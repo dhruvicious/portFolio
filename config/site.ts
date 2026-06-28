@@ -1,4 +1,3 @@
-import { FileText, FolderGit2, Linkedin, PenSquare } from "lucide-react";
 
 export const siteConfig = {
   navLinks: [
