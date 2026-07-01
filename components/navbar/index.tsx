@@ -339,15 +339,6 @@ export function Navbar() {
 
   return (
     <>
-      {/* SVG Liquid Distortion Filter */}
-      <svg style={{ position: "absolute", width: 0, height: 0 }}>
-        <filter id="glass-distortion" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="8" result="noise" />
-          <feGaussianBlur in="noise" stdDeviation="2.5" result="softNoise" />
-          <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="40" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-      </svg>
-
       <div className={styles.wrap}>
         <nav ref={navRef} className={styles.nav} id="nav">
           <div ref={indicatorRef} className={styles.indicator} id="indicator" />

@@ -1,54 +1,90 @@
+/* ticker.module.css */
 .container {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 8rem; /* h-32 */
-  overflow: hidden;
-  z-index: 10;
-  pointer-events: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 8rem; /* h-32 */
+    overflow: hidden;
+    z-index: 10;
+    pointer-events: none;
 }
-
 @media (min-width: 640px) {
-  .container {
-    height: 12rem; /* sm:h-48 */
-  }
+    .container {
+        height: 12rem; /* sm:h-48 */
+    }
 }
 @media (min-width: 768px) {
-  .container {
-    height: 16rem; /* md:h-64 */
-  }
+    .container {
+        height: 16rem; /* md:h-64 */
+    }
 }
 @media (min-width: 1024px) {
-  .container {
-    height: 30vh; /* lg:h-[30vh] */
-  }
+    .container {
+        height: 30vh; /* lg:h-[30vh] */
+    }
 }
 
 .track {
-  display: flex;
-  width: max-content;
-  will-change: transform;
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    animation: scroll 20s linear infinite;
 }
 
 .image {
-  height: 8rem; /* h-32 */
-  width: auto;
-  flex-shrink: 0;
+    height: 8rem; /* h-32 */
+    width: calc(
+        8372 / 652 * 8rem
+    ); /* explicit, matches intrinsic aspect ratio exactly */
+    flex-shrink: 0;
+    display: block;
+    will-change: transform;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
 }
 @media (min-width: 640px) {
-  .image {
-    height: 12rem;
-  }
+    .image {
+        height: 12rem;
+        width: calc(8372 / 652 * 12rem);
+        will-change: transform;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        transform: translate3d(0, 0, 0);
+    }
 }
 @media (min-width: 768px) {
-  .image {
-    height: 16rem;
-  }
+    .image {
+        height: 16rem;
+        width: calc(8372 / 652 * 16rem);
+        will-change: transform;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        transform: translate3d(0, 0, 0);
+    }
 }
 @media (min-width: 1024px) {
-  .image {
-    height: 30vh;
-  }
+    .image {
+        height: 30vh;
+        width: calc(8372 / 652 * 30vh);
+        will-change: transform;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        transform: translate3d(0, 0, 0);
+    }
 }
+
+@keyframes scroll {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-25%, 0, 0);
+    }
+}
+
