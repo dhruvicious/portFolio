@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
+import styles from "./ticker.module.css";
 
 export function ScrollingTicker() {
   const [mounted, setMounted] = useState(false);
@@ -39,6 +40,7 @@ export function ScrollingTicker() {
       });
     };
 
+    // Run initially
     createAnimation();
 
     // Recalculate on image load or window resize to ensure no gap or jitter
@@ -54,34 +56,21 @@ export function ScrollingTicker() {
   }, [mounted]);
 
   if (!mounted) {
+    // Return matching simple shell layout to prevent mismatched tree hydration
     return (
-      <div
-        className="absolute inset-x-0 top-1/2 -translate-y-1/2
-                   h-32 sm:h-48 md:h-64 lg:h-[30vh]
-                   overflow-hidden z-10 pointer-events-none"
-        suppressHydrationWarning
-      />
+      <div className={styles.container} suppressHydrationWarning />
     );
   }
 
   return (
-    <div
-      className="absolute inset-x-0 top-1/2 -translate-y-1/2
-                 h-32 sm:h-48 md:h-64 lg:h-[30vh]
-                 overflow-hidden z-10 pointer-events-none"
-      suppressHydrationWarning
-    >
-      <div
-        ref={trackRef}
-        className="flex w-max"
-        style={{ willChange: "transform" }}
-      >
+    <div className={styles.container} suppressHydrationWarning>
+      <div ref={trackRef} className={styles.track}>
         <Image
           src="/ScrollingName.svg"
           alt="Scrolling Name"
           width={8372}
           height={652}
-          className="h-32 sm:h-48 md:h-64 lg:h-[30vh] w-auto shrink-0"
+          className={styles.image}
           priority
         />
         <Image
@@ -89,7 +78,7 @@ export function ScrollingTicker() {
           alt=""
           width={8372}
           height={652}
-          className="h-32 sm:h-48 md:h-64 lg:h-[30vh] w-auto shrink-0"
+          className={styles.image}
           priority
           aria-hidden="true"
         />

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { animate } from "animejs";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
+import styles from "./navbar.module.css";
 
 // Register Draggable on client side
 if (typeof window !== "undefined") {
@@ -52,7 +53,7 @@ export function Navbar() {
     const nav = navRef.current;
     if (!nav) return;
 
-    const pillElements = nav.querySelectorAll(".pill");
+    const pillElements = pillsRef.current;
     const measuredWidths: number[] = [];
 
     // Measure collapsed width dynamically from the first pill
@@ -66,7 +67,7 @@ export function Navbar() {
       clone.style.position = "absolute";
       clone.style.visibility = "hidden";
       clone.style.left = "-9999px";
-      clone.classList.remove("active");
+      clone.classList.remove(styles.active);
       
       nav.appendChild(clone);
       colWidth = clone.getBoundingClientRect().width;
@@ -76,6 +77,7 @@ export function Navbar() {
 
     // Measure expanded widths for all pills
     pillElements.forEach((el: any) => {
+      if (!el) return;
       const clone = el.cloneNode(true);
       clone.style.transition = "none";
       const span = clone.querySelector("span");
@@ -83,7 +85,7 @@ export function Navbar() {
       clone.style.position = "absolute";
       clone.style.visibility = "hidden";
       clone.style.left = "-9999px";
-      clone.classList.add("active");
+      clone.classList.add(styles.active);
 
       nav.appendChild(clone);
       const width = clone.getBoundingClientRect().width;
@@ -346,13 +348,13 @@ export function Navbar() {
         </filter>
       </svg>
 
-      <div className="nav-wrap select-none pointer-events-auto">
-        <nav ref={navRef} className="glass-nav" id="nav">
-          <div ref={indicatorRef} className="indicator" id="indicator" />
+      <div className={styles.wrap}>
+        <nav ref={navRef} className={styles.nav} id="nav">
+          <div ref={indicatorRef} className={styles.indicator} id="indicator" />
           
           <div
             ref={(el) => { pillsRef.current[0] = el; }}
-            className={`pill ${activeIndex === 0 ? "active" : ""}`}
+            className={`${styles.pill} ${activeIndex === 0 ? styles.active : ""}`}
             onClick={() => handlePillClick(0, "home")}
           >
             <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5" /><path d="M5.5 10v9.5h13V10" /><path d="M9.5 19.5V14h5v5.5" /></svg>
@@ -361,7 +363,7 @@ export function Navbar() {
 
           <div
             ref={(el) => { pillsRef.current[1] = el; }}
-            className={`pill ${activeIndex === 1 ? "active" : ""}`}
+            className={`${styles.pill} ${activeIndex === 1 ? styles.active : ""}`}
             onClick={() => handlePillClick(1, "about-me")}
           >
             <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4" /><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5" /></svg>
@@ -370,7 +372,7 @@ export function Navbar() {
 
           <div
             ref={(el) => { pillsRef.current[2] = el; }}
-            className={`pill ${activeIndex === 2 ? "active" : ""}`}
+            className={`${styles.pill} ${activeIndex === 2 ? styles.active : ""}`}
             onClick={() => handlePillClick(2, "my-work")}
           >
             <svg viewBox="0 0 24 24">
@@ -382,7 +384,7 @@ export function Navbar() {
 
           <div
             ref={(el) => { pillsRef.current[3] = el; }}
-            className={`pill ${activeIndex === 3 ? "active" : ""}`}
+            className={`${styles.pill} ${activeIndex === 3 ? styles.active : ""}`}
             onClick={() => handlePillClick(3, "contact-me")}
           >
             <svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5" /><circle cx="12" cy="17.5" r="0.6" fill="#17181c" /></svg>

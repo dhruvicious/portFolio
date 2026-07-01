@@ -44,7 +44,7 @@ export default function Home() {
 
         {/* Hero Graphic (on top of ticker: z-20) */}
         <Image
-          src="/hero.svg"
+          src="/hero.png"
           alt="Hero Graphic"
           fill
           priority

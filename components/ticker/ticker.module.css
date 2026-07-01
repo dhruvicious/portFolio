@@ -1,0 +1,54 @@
+.container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 8rem; /* h-32 */
+  overflow: hidden;
+  z-index: 10;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .container {
+    height: 12rem; /* sm:h-48 */
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    height: 16rem; /* md:h-64 */
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    height: 30vh; /* lg:h-[30vh] */
+  }
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.image {
+  height: 8rem; /* h-32 */
+  width: auto;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .image {
+    height: 12rem;
+  }
+}
+@media (min-width: 768px) {
+  .image {
+    height: 16rem;
+  }
+}
+@media (min-width: 1024px) {
+  .image {
+    height: 30vh;
+  }
+}
