@@ -6,6 +6,7 @@ import { ScrollingTicker } from "@/components/ticker";
 import { Navbar } from "@/components/navbar";
 import { Loader } from "@/components/loader";
 import { AboutCrawl } from "@/components/about-crawl";
+import { StarWarsIntroText } from "@/components/starwars-intro";
 import styles from "./page.module.css";
 
 interface PolkaDot {
@@ -64,6 +65,8 @@ export default function Home() {
   return (
     <>
       {loading && <Loader onComplete={() => setLoading(false)} />}
+      
+      <StarWarsIntroText />
 
       <div className={styles.page}>
         {/* Section 1: Home */}

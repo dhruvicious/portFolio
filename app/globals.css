@@ -101,6 +101,11 @@
 @layer base {
     * {
         @apply border-border outline-ring/50;
+        /* Make text globally unselectable */
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
     }
     body {
         @apply bg-background text-foreground transition-colors duration-700;

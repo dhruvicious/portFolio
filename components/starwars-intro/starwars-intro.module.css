@@ -1,0 +1,34 @@
+.introOverlay {
+  position: fixed;
+  top: 40vh; /* Centered vertically like the classic intro */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9000; /* Must be lower than Loader's 9999 */
+  pointer-events: none;
+  width: auto;
+  max-width: 90%;
+}
+
+.introText {
+  color: #4bd5ee;
+  font-size: 1.8rem;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+  text-align: left;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  pointer-events: auto; /* Enable clicks inside the text overlay */
+}
+
+.skipLink {
+  color: #4bd5ee;
+  text-decoration: underline;
+  text-underline-offset: 6px; /* Give the underline some space */
+  cursor: pointer;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.skipLink:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(75, 213, 238, 0.8);
+}

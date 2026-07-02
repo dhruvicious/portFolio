@@ -50,12 +50,17 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
           // window.innerHeight live inside the tween's function-based values.
           const vh = window.innerHeight;
 
-          const travelDist = panel.scrollHeight;
-          const totalTravel = travelDist * 1.1;
+          // By decoupling the physical text movement from the actual scroll distance,
+          // we can apply a multiplier to make the scroll feel "heavier".
+          const scrollWeight = 2.5; // 2.5x more scrolling required for the same distance
+          const physicalTravel = panel.scrollHeight * 1.1;
+          const scrollDuration = physicalTravel * scrollWeight;
 
-          gsap.set(container, { height: `calc(${totalTravel}px + 100vh)` });
+          // The container height dictates how far the user actually has to scroll
+          gsap.set(container, { height: `calc(${scrollDuration}px + 100vh)` });
           gsap.set(panel, { top: 0 });
 
+          // A perfectly linear scroll from start to finish (no heavy pull)
           gsap.fromTo(
             panel,
             {
@@ -65,7 +70,7 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
               xPercent: -50,
             },
             {
-              y: vh - totalTravel,
+              y: vh - physicalTravel,
               z: -1500,
               rotationX: 20,
               xPercent: -50,
@@ -77,7 +82,7 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
                 scrub: true,
                 invalidateOnRefresh: true,
               },
-            },
+            }
           );
         },
       );
