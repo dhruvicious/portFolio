@@ -131,7 +131,7 @@ export function Navbar() {
     const observerOptions = {
       root: null,
       rootMargin: "-30% 0px -40% 0px", // focus viewport range in the middle
-      threshold: 0.1,
+      threshold: 0, // MUST be 0 so massive GSAP pinned sections can trigger it
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
@@ -157,13 +157,25 @@ export function Navbar() {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+    const observeSections = () => {
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && !el.dataset.observed) {
+          observer.observe(el);
+          el.dataset.observed = "true";
+        }
+      });
+    };
+
+    observeSections();
+
+    // Since 'about-me' is mounted asynchronously after fetching the markdown file,
+    // we need to check periodically to attach the observer when it finally spawns.
+    const pollInterval = setInterval(observeSections, 500);
 
     return () => {
       observer.disconnect();
+      clearInterval(pollInterval);
     };
   }, [mounted]);
 

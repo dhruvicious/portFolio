@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ScrollingTicker } from "@/components/ticker";
 import { Navbar } from "@/components/navbar";
 import { Loader } from "@/components/loader";
+import { AboutCrawl } from "@/components/about-crawl";
 import styles from "./page.module.css";
 
 interface PolkaDot {
@@ -20,6 +21,18 @@ interface PolkaDot {
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [dots, setDots] = useState<PolkaDot[]>([]);
+
+  const [aboutParagraphs, setAboutParagraphs] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch('/about.md')
+      .then((res) => res.text())
+      .then((text) => {
+        const paras = text.split('\n\n').map(p => p.trim()).filter(Boolean);
+        setAboutParagraphs(paras);
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     const generated = Array.from({ length: 30 }).map(() => {
@@ -68,10 +81,11 @@ export default function Home() {
           <div className={styles.heroHint}>SCROLL DOWN TO EXPLORE</div>
         </section>
 
-        {/* Section 2: About Me */}
-        <section id="about-me" className={styles.section}>
-          <h2 className={styles.sectionHeading}>About Me</h2>
-        </section>
+        {/* Section 2: About Me — only mount once content is ready so GSAP
+            never measures scrollHeight against an empty paragraphs array */}
+        {aboutParagraphs.length > 0 && (
+          <AboutCrawl title="ABOUT ME" paragraphs={aboutParagraphs} />
+        )}
 
         {/* Section 3: My Work */}
         <section id="my-work" className={styles.section}>
