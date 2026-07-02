@@ -64,6 +64,24 @@
     mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
 }
+
+.glassFadeBottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20vh; /* Covers the bottom 20% of the screen */
+    z-index: 10;
+    pointer-events: none;
+    /* The frosted glass blur */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    /* Deep space black fade emerging from the bottom */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+    /* Fade the blur itself out smoothly */
+    mask-image: linear-gradient(to top, black 30%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%);
+}
 .title {
     text-align: center;
     font-size: 10vw; /* Massive title */

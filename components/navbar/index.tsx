@@ -17,6 +17,7 @@ const NAV_GAP = 4;
 export function Navbar() {
   const [mounted, setMounted] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [navTheme, setNavTheme] = useState("light");
   const [collapsedWidth, setCollapsedWidth] = useState(40);
   const [expandedWidths, setExpandedWidths] = useState<number[]>([76, 122, 118, 140]);
 
@@ -38,6 +39,15 @@ export function Navbar() {
   // Scrolling guards to prevent scrollspy from triggering intermediate states during automated scroll
   const isNavClickScrollRef = useRef(false);
   const scrollTimeoutRef = useRef<any>(null);
+
+  // Dynamically update the theme based on the active section's data attribute
+  useEffect(() => {
+    const sections = ["home", "about-me", "my-work", "contact-me"];
+    const el = document.getElementById(sections[activeIndex]);
+    if (el) {
+      setNavTheme(el.dataset.navTheme || "light");
+    }
+  }, [activeIndex]);
 
   useEffect(() => {
     setMounted(true);
@@ -130,7 +140,7 @@ export function Navbar() {
     const sections = ["home", "about-me", "my-work", "contact-me"];
     const observerOptions = {
       root: null,
-      rootMargin: "-30% 0px -40% 0px", // focus viewport range in the middle
+      rootMargin: "-90% 0px -5% 0px", 
       threshold: 0, // MUST be 0 so massive GSAP pinned sections can trigger it
     };
 
@@ -351,7 +361,7 @@ export function Navbar() {
 
   return (
       <div className={styles.wrap}>
-        <nav ref={navRef} className={styles.nav} id="nav">
+        <nav ref={navRef} className={`${styles.nav} ${navTheme === "dark" ? styles.darkTheme : ""}`} id="nav">
           <div ref={indicatorRef} className={styles.indicator} id="indicator" />
           
           <div

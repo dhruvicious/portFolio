@@ -67,7 +67,7 @@ export default function Home() {
 
       <div className={styles.page}>
         {/* Section 1: Home */}
-        <section id="home" className={styles.sectionHome}>
+        <section id="home" className={styles.sectionHome} data-nav-theme="light">
           <ScrollingTicker />
 
           <Image
@@ -88,12 +88,12 @@ export default function Home() {
         )}
 
         {/* Section 3: My Work */}
-        <section id="my-work" className={styles.section}>
+        <section id="my-work" className={styles.section} data-nav-theme="light">
           <h2 className={styles.sectionHeading}>My Work</h2>
         </section>
 
         {/* Section 4: Contact Me */}
-        <section id="contact-me" className={styles.sectionContact}>
+        <section id="contact-me" className={styles.sectionContact} data-nav-theme="light">
           <h2 className={styles.sectionHeading}>Contact Me</h2>
         </section>
 

@@ -92,10 +92,13 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
       ref={containerRef}
       id="about-me"
       className={styles.scrollContainer}
+      data-nav-theme="dark"
     >
       <div className={styles.stickySection}>
+        {/* The new frosted glass overlay at the top of the viewport */}
         <div className={styles.glassFade} />
-
+        {/* Symmetrical frosted glass overlay at the bottom of the viewport */}
+        <div className={styles.glassFadeBottom} />
         <div className={styles.wrapper}>
           <div ref={panelRef} className={styles.scrollText}>
             <h2 className={styles.title}>{title}</h2>

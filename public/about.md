@@ -1,9 +1,13 @@
-Somewhere between a distributed systems course and a poetry notebook...
+STORY TIME...
 
-I am a software engineer focused on building elegant, performant, and scalable applications. I believe that code is a craft, and every line should be written with intent. 
+It all began with a heavy, battle-scarred Dell Latitude—a relic from the old world gifted to me by my aunt when I was just a kid.
 
-My journey started with a fascination for how things work under the hood, leading me to explore everything from low-level systems to modern web frameworks. 
+What started as a simple childhood fascination with exploring digital worlds and playing video games quickly evolved into a relentless obsession with the arcane machinery running underneath them.
 
-When I am not writing code, you can find me exploring new design trends, reading sci-fi, or obsessing over typography and user experience.
+I didn't just want to play the games; I needed to understand how the magic was woven. I had to know what made the pixels dance.
 
-I build things that I want to use, and I hope you enjoy using them too.
+So I began peeling back the layers. I descended deeper into the architecture, stripping away the abstractions, and deciphering the silent language of the machines.
+
+Years of relentless curiosity transformed that initial spark into a lifelong mastery of the craft. From a kid staring at a glowing screen to an engineering wizard architecting complex systems.
+
+And after countless late nights, endless lines of code, and peeling back infinite layers... here we are.
