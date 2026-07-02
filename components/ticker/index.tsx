@@ -3,7 +3,7 @@ import styles from "./ticker.module.css";
 
 export function ScrollingTicker() {
   return (
-    <div className={styles.container} suppressHydrationWarning>
+    <div className={styles.container}>
       <div className={styles.track}>
         <Image
           src="/ScrollingName.svg"

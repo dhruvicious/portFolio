@@ -338,7 +338,6 @@ export function Navbar() {
   if (!mounted) return null;
 
   return (
-    <>
       <div className={styles.wrap}>
         <nav ref={navRef} className={styles.nav} id="nav">
           <div ref={indicatorRef} className={styles.indicator} id="indicator" />
@@ -383,6 +382,5 @@ export function Navbar() {
           </div>
         </nav>
       </div>
-    </>
   );
 }
