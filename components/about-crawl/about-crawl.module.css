@@ -96,3 +96,123 @@
     color: #FFE81F;
     text-shadow: 0 0 8px rgba(255, 232, 31, 0.3);
 }
+
+/* --- Easter Egg Tab --- */
+@keyframes faintPulse {
+    0% { filter: drop-shadow(0 0 2px rgba(255, 232, 31, 0.2)); opacity: 0.6; }
+    50% { filter: drop-shadow(0 0 8px rgba(255, 232, 31, 0.6)); opacity: 1; }
+    100% { filter: drop-shadow(0 0 2px rgba(255, 232, 31, 0.2)); opacity: 0.6; }
+}
+
+.easterEggTab {
+    position: absolute;
+    top: 50%;
+    left: 2rem;
+    transform: translateY(-50%) translateX(-4rem) rotate(-45deg);
+    width: 32px;
+    height: 32px;
+    color: rgba(255, 232, 31, 0.7); /* Brighter default color */
+    cursor: pointer;
+    z-index: 50;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease, filter 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.easterEggTab.visible {
+    transform: translateY(-50%) translateX(0) rotate(0deg);
+    opacity: 1;
+    pointer-events: auto;
+    animation: faintPulse 3s infinite ease-in-out;
+}
+
+.easterEggTab:hover {
+    color: rgba(255, 232, 31, 1);
+    filter: drop-shadow(0 0 12px rgba(255, 232, 31, 1));
+    transform: translateY(-50%) scale(1.2);
+    animation: none; /* Stop pulsing on hover so it stays bright */
+}
+
+.easterEggTab svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* --- Game Window Overlay --- */
+.gameWindow {
+    position: absolute;
+    top: 5%;
+    left: 2%;
+    transform: translateX(-40px) scale(0.95);
+    width: 46%; /* Take up nearly half the screen width on the left */
+    height: 90%;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(255, 232, 31, 0.4);
+    border-radius: 12px;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 232, 31, 0.15);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    overflow: hidden;
+}
+
+.gameWindow.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0) scale(1);
+}
+
+.gameHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    background: rgba(255, 232, 31, 0.1);
+    border-bottom: 1px solid rgba(255, 232, 31, 0.2);
+}
+
+.gameTitle {
+    color: #FFE81F;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-shadow: 0 0 5px rgba(255, 232, 31, 0.5);
+}
+
+.closeButton {
+    background: transparent;
+    border: none;
+    color: rgba(255, 232, 31, 0.7);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+    color: #FFE81F;
+    background: rgba(255, 232, 31, 0.2);
+    transform: scale(1.1);
+}
+
+.gameIframe {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: #000;
+}
