@@ -72,9 +72,26 @@ export function StarWarsIntroText() {
 
   const handleSkip = (e: React.MouseEvent) => {
     e.preventDefault();
-    const target = document.getElementById("my-work");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
+    
+    // Notify the app that the user has explicitly skipped the crawl
+    window.dispatchEvent(new CustomEvent("crawlSkipped"));
+    
+    // Find the ScrollTrigger instance that controls the About crawl
+    const aboutST = ScrollTrigger.getAll().find(st => st.trigger && st.trigger.id === "about-me");
+    
+    if (aboutST) {
+      // Scroll exactly to the bottom of the pinned crawl! 
+      // This will instantly trigger the tech stack ticker animation.
+      window.scrollTo({
+        top: aboutST.end,
+        behavior: "smooth"
+      });
+    } else {
+      // Fallback
+      const target = document.getElementById("my-work");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 

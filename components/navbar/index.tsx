@@ -40,13 +40,10 @@ export function Navbar() {
   const isNavClickScrollRef = useRef(false);
   const scrollTimeoutRef = useRef<any>(null);
 
-  // Dynamically update the theme based on the active section's data attribute
+  // Dynamically update the theme based on the active index
   useEffect(() => {
-    const sections = ["home", "about-me", "my-work", "contact-me"];
-    const el = document.getElementById(sections[activeIndex]);
-    if (el) {
-      setNavTheme(el.dataset.navTheme || "light");
-    }
+    const themes = ["light", "dark", "light", "light"];
+    setNavTheme(themes[activeIndex] || "light");
   }, [activeIndex]);
 
   useEffect(() => {
@@ -144,6 +141,8 @@ export function Navbar() {
       threshold: 0, // MUST be 0 so massive GSAP pinned sections can trigger it
     };
 
+    const intersectingSections = new Set<number>();
+
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       // If we are currently smooth scrolling from a click/drag, ignore observer updates
       if (isNavClickScrollRef.current) {
@@ -155,14 +154,24 @@ export function Navbar() {
         return;
       }
 
+      let changed = false;
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const index = sections.indexOf(entry.target.id);
-          if (index !== -1) {
-            setActiveIndex(index);
+        const index = sections.indexOf(entry.target.id);
+        if (index !== -1) {
+          if (entry.isIntersecting) {
+            intersectingSections.add(index);
+            changed = true;
+          } else {
+            intersectingSections.delete(index);
+            changed = true;
           }
         }
       });
+
+      if (changed && intersectingSections.size > 0) {
+        const active = Math.max(...Array.from(intersectingSections));
+        setActiveIndex(active);
+      }
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);

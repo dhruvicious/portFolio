@@ -1,0 +1,168 @@
+.tickerContainer {
+  position: absolute;
+  bottom: 15vh;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  /* Premium frosted glass base */
+  background: rgba(10, 10, 25, 0.2);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  /* Reverted back to Star Wars yellow */
+  border-top: 1px solid rgba(255, 232, 31, 0.3);
+  border-bottom: 1px solid rgba(255, 232, 31, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 100;
+  /* Slide from 100% (below its position) */
+  transform: translateY(200%);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tickerContainer.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.track.animate {
+  /* Sped up from 40s to 25s */
+  animation: scroll 25s linear infinite;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+}
+
+.item {
+  color: #FFE81F; /* Star Wars Yellow to match the theme */
+  font-family: monospace; /* A bit of a code aesthetic */
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  text-shadow: 0 0 10px rgba(255, 232, 31, 0.5);
+}
+
+.separator {
+  color: rgba(255, 232, 31, 0.3);
+  margin: 0 3rem;
+  text-shadow: none;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Using 4 lists means 50% shifts exactly 2 lists seamlessly */
+  }
+}
+
+.falconOverlay {
+  position: absolute;
+  top: 50%;
+  left: 120vw; /* start off-screen right */
+  /* Point LEFT (assuming the raw SVG points UP, -90deg faces left) */
+  transform: translateY(-50%) rotate(-90deg);
+  z-index: 200;
+  height: 60px;
+  width: auto;
+  pointer-events: none;
+}
+
+/* When the ticker is visible, fire the zip animation */
+.tickerContainer.visible .falconOverlay {
+  /* Twice as fast */
+  animation: zipAcrossRightToLeft 2s cubic-bezier(0.2, 0, 0.8, 1) forwards;
+}
+
+@keyframes zipAcrossRightToLeft {
+  0% {
+    left: 100vw; /* Start exactly at the right edge, no delay! */
+  }
+  100% {
+    left: -200px; /* Fly off-screen left */
+  }
+}
+
+.trackWrapper {
+  width: 100%;
+  opacity: 0; /* Hidden initially */
+  position: relative;
+  z-index: 1;
+  /* Reduced wait from 5.2s to 2.6s */
+  animation: revealTrack 1s ease 2.6s forwards;
+}
+
+.centerLabel {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  transform: translateY(-50%);
+  color: #FFE81F;
+  font-family: monospace;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  /* Add padding-left equal to letter-spacing to perfectly visually center it */
+  padding-left: 4px;
+  white-space: nowrap;
+  text-shadow: 0 0 16px rgba(255, 232, 31, 0.8), 0 0 32px rgba(255, 232, 31, 0.4);
+  opacity: 0;
+  z-index: 50; /* Above the track but below the Falcon (200) */
+  /* 1s duration, starts at 1.6s (80% of falcon flight) */
+  animation: flashLabel 1s ease-in-out 1.6s forwards;
+}
+
+@keyframes flashLabel {
+  0% { 
+    opacity: 0; 
+    letter-spacing: 0px; 
+    padding-left: 0px;
+    filter: blur(8px); 
+    transform: translateY(-50%) scale(0.9);
+  }
+  20% { 
+    opacity: 1; 
+    letter-spacing: 6px; 
+    padding-left: 6px;
+    filter: blur(0px); 
+    transform: translateY(-50%) scale(1);
+  }
+  80% { 
+    opacity: 1; 
+    letter-spacing: 6px; 
+    padding-left: 6px;
+    filter: blur(0px); 
+    transform: translateY(-50%) scale(1);
+  }
+  100% { 
+    opacity: 0; 
+    letter-spacing: 12px; 
+    padding-left: 12px;
+    filter: blur(8px); 
+    transform: translateY(-50%) scale(1.1);
+  }
+}
+
+@keyframes revealTrack {
+  to {
+    opacity: 1;
+  }
+}
