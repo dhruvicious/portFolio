@@ -26,6 +26,7 @@ export function VideoScrollSequence() {
   // Smooth interpolation loop — runs independently of scroll
   useEffect(() => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    let lastSeekTime = 0;
 
     const tick = () => {
       rafRef.current = requestAnimationFrame(tick);
@@ -35,14 +36,16 @@ export function VideoScrollSequence() {
       const video = videoRef.current;
       if (!video) return;
 
-      // Smoothly approach the target time (0.06 = buttery smooth, lower = smoother)
       currentTimeRef.current = lerp(currentTimeRef.current, targetTimeRef.current, 0.06);
 
-      // Clamp to valid range
       const dur = durationRef.current;
       currentTimeRef.current = Math.max(0, Math.min(dur, currentTimeRef.current));
 
-      video.currentTime = currentTimeRef.current;
+      const delta = Math.abs(video.currentTime - currentTimeRef.current);
+      if (delta > 0.01) {
+        // Now that the video has all keyframes, we can seek every frame (60fps) on all browsers.
+        video.currentTime = currentTimeRef.current;
+      }
     };
 
     rafRef.current = requestAnimationFrame(tick);
@@ -152,7 +155,7 @@ export function VideoScrollSequence() {
         <video
           ref={videoRef}
           className={styles.video}
-          src="/video.mp4"
+          src="/video_scrub.mp4"
           playsInline
           muted
           preload="auto"
