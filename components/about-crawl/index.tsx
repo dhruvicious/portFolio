@@ -85,6 +85,7 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
           // The container height dictates how far the user actually has to scroll
           gsap.set(container, { height: `calc(${scrollDuration}px + 100vh)` });
           gsap.set(panel, { top: 0 });
+          ScrollTrigger.refresh();
 
           // A perfectly linear scroll from start to finish (no heavy pull)
           gsap.fromTo(

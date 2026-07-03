@@ -40,11 +40,65 @@ export function Navbar() {
   const isNavClickScrollRef = useRef(false);
   const scrollTimeoutRef = useRef<any>(null);
 
-  // Dynamically update the theme based on the active index
+  // Dynamically update the theme based on which data-nav-theme element is in view
   useEffect(() => {
-    const themes = ["light", "dark", "light", "light"];
-    setNavTheme(themes[activeIndex] || "light");
-  }, [activeIndex]);
+    if (!mounted) return;
+
+    const themeObserverOptions = {
+      root: null,
+      rootMargin: "-45% 0px -45% 0px", // narrow band in the middle of the viewport
+      threshold: 0,
+    };
+
+    const activeThemeElements = new Set<Element>();
+
+    const themeObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          activeThemeElements.add(entry.target);
+        } else {
+          activeThemeElements.delete(entry.target);
+        }
+      });
+
+      // Pick the theme from the element closest to the bottom of the set
+      // (i.e. the one the user is scrolling into)
+      if (activeThemeElements.size > 0) {
+        // Get the one with the largest top offset (furthest down the page)
+        let latest: Element | null = null;
+        let latestTop = -Infinity;
+        activeThemeElements.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top > latestTop) {
+            latestTop = rect.top;
+            latest = el;
+          }
+        });
+        if (latest) {
+          const theme = (latest as HTMLElement).dataset.navTheme || "light";
+          setNavTheme(theme);
+        }
+      }
+    }, themeObserverOptions);
+
+    // Observe all elements with data-nav-theme
+    const observeThemeElements = () => {
+      document.querySelectorAll("[data-nav-theme]").forEach((el) => {
+        if (!(el as HTMLElement).dataset.navThemeObserved) {
+          themeObserver.observe(el);
+          (el as HTMLElement).dataset.navThemeObserved = "true";
+        }
+      });
+    };
+
+    observeThemeElements();
+    const pollInterval = setInterval(observeThemeElements, 500);
+
+    return () => {
+      themeObserver.disconnect();
+      clearInterval(pollInterval);
+    };
+  }, [mounted]);
 
   useEffect(() => {
     setMounted(true);

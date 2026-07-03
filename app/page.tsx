@@ -7,6 +7,7 @@ import { Navbar } from "@/components/navbar";
 import { Loader } from "@/components/loader";
 import { AboutCrawl } from "@/components/about-crawl";
 import { StarWarsIntroText } from "@/components/starwars-intro";
+import { VideoScrollSequence } from "@/components/video-scroll";
 import styles from "./page.module.css";
 
 interface PolkaDot {
@@ -84,10 +85,13 @@ export default function Home() {
           <div className={styles.heroHint}>SCROLL DOWN TO EXPLORE</div>
         </section>
 
-        {/* Section 2: About Me — only mount once content is ready so GSAP
+        {/* Section 2: About Me & Video Transition — only mount once content is ready so GSAP
             never measures scrollHeight against an empty paragraphs array */}
         {aboutParagraphs.length > 0 && (
-          <AboutCrawl title="ABOUT ME" paragraphs={aboutParagraphs} />
+          <>
+            <AboutCrawl title="ABOUT ME" paragraphs={aboutParagraphs} />
+            <VideoScrollSequence />
+          </>
         )}
 
         {/* Section 3: My Work */}
