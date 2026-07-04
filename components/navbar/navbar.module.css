@@ -37,6 +37,12 @@
     --ind-inset-bottom: rgba(255, 255, 255, 0.05);
   }
 
+  &.hiddenTheme {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+  }
+
   position: relative;
   display: flex;
   align-items: center;

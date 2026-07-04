@@ -424,7 +424,7 @@ export function Navbar() {
 
   return (
       <div className={styles.wrap}>
-        <nav ref={navRef} className={`${styles.nav} ${navTheme === "dark" ? styles.darkTheme : ""}`} id="nav">
+        <nav ref={navRef} className={`${styles.nav} ${navTheme === "dark" ? styles.darkTheme : ""} ${navTheme === "hidden" ? styles.hiddenTheme : ""}`} id="nav">
           <div ref={indicatorRef} className={styles.indicator} id="indicator" />
           
           <div

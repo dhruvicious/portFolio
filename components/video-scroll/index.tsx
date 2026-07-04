@@ -16,6 +16,14 @@ export function VideoScrollSequence() {
   const trackRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
 
+  // HUD Refs
+  const hudRef = useRef<HTMLDivElement>(null);
+  const heapRef = useRef<HTMLSpanElement>(null);
+  const entropyRef = useRef<HTMLSpanElement>(null);
+  const cafRef = useRef<HTMLSpanElement>(null);
+  const worksTargetRef = useRef<HTMLSpanElement>(null);
+  const aboutTargetRef = useRef<HTMLSpanElement>(null);
+
   // Smooth playback state — lives outside React render cycle for performance
   const targetTimeRef = useRef(0);
   const currentTimeRef = useRef(0);
@@ -26,7 +34,6 @@ export function VideoScrollSequence() {
   // Smooth interpolation loop — runs independently of scroll
   useEffect(() => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-    let lastSeekTime = 0;
 
     const tick = () => {
       rafRef.current = requestAnimationFrame(tick);
@@ -49,7 +56,25 @@ export function VideoScrollSequence() {
     };
 
     rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
+
+    // WAKE UP FIX: When returning to the tab, the browser often suspends the video decoder.
+    // Playing and immediately pausing it forces the browser to wake the video back up.
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible" && videoRef.current) {
+        videoRef.current.play().then(() => {
+          videoRef.current?.pause();
+        }).catch(() => {
+          // Ignore play interruption errors
+        });
+      }
+    };
+    
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   useGSAP(
@@ -60,8 +85,9 @@ export function VideoScrollSequence() {
       const overlay = overlayRef.current;
       const track = trackRef.current;
       const thumb = thumbRef.current;
+      const hud = hudRef.current;
 
-      if (!spacer || !video || !flash || !overlay || !track || !thumb) return;
+      if (!spacer || !video || !flash || !overlay || !track || !thumb || !hud) return;
 
       const setupScroll = () => {
         const dur = video.duration || 1;
@@ -73,6 +99,17 @@ export function VideoScrollSequence() {
           end: "bottom top",
           onUpdate: (self) => {
             const p = self.progress;
+
+            // Update Target text based on scroll direction (1 = down, -1 = up)
+            if (worksTargetRef.current && aboutTargetRef.current) {
+              if (self.direction === 1) {
+                worksTargetRef.current.style.opacity = "1";
+                aboutTargetRef.current.style.opacity = "0";
+              } else if (self.direction === -1) {
+                worksTargetRef.current.style.opacity = "0";
+                aboutTargetRef.current.style.opacity = "1";
+              }
+            }
 
             // Show/hide the fixed overlay
             if (p > 0.001 && p < 0.999) {
@@ -87,6 +124,7 @@ export function VideoScrollSequence() {
               flash.style.opacity = String(t);
               video.style.opacity = "0";
               track.style.opacity = "0";
+              hud.style.opacity = "0";
               isActiveRef.current = false;
               overlay.style.background = "#000";
             } else if (p <= 0.08) {
@@ -95,6 +133,7 @@ export function VideoScrollSequence() {
               flash.style.opacity = String(1 - t);
               video.style.opacity = "1";
               track.style.opacity = String(t);
+              hud.style.opacity = String(t);
               isActiveRef.current = true;
               targetTimeRef.current = 0;
             } else if (p <= 0.92) {
@@ -102,6 +141,7 @@ export function VideoScrollSequence() {
               flash.style.opacity = "0";
               video.style.opacity = "1";
               track.style.opacity = "1";
+              hud.style.opacity = "1";
               isActiveRef.current = true;
 
               const videoProgress = (p - 0.08) / 0.84;
@@ -112,6 +152,27 @@ export function VideoScrollSequence() {
               const thumbHeight = thumb.offsetHeight;
               const maxTravel = trackHeight - thumbHeight;
               thumb.style.top = `${videoProgress * maxTravel}px`;
+
+              // Update Nerd Paradise HUD Stats
+              
+              // Actual Live Memory Usage (JS Heap) using the browser's performance API
+              if (heapRef.current) {
+                const mem = (performance as any).memory;
+                if (mem && mem.usedJSHeapSize) {
+                  const mb = mem.usedJSHeapSize / (1024 * 1024);
+                  heapRef.current.innerText = mb.toFixed(1);
+                } else {
+                  // Fallback jitter for Safari/Firefox which don't expose memory API
+                  heapRef.current.innerText = (120 + Math.random() * 5).toFixed(1);
+                }
+              }
+              
+              // Random hex string to simulate entropy or commit hashes
+              if (entropyRef.current) entropyRef.current.innerText = "0x" + Math.random().toString(16).substring(2, 8).toUpperCase();
+              
+              // Caffeine ticking up slowly based on scroll
+              if (cafRef.current) cafRef.current.innerText = (1.2 + videoProgress * 2.8).toFixed(1);
+
             } else if (p <= 0.96) {
               // EXIT FLASH IN
               const t = (p - 0.92) / 0.04;
@@ -119,12 +180,14 @@ export function VideoScrollSequence() {
               video.style.opacity = "1";
               targetTimeRef.current = dur;
               track.style.opacity = String(1 - t);
+              hud.style.opacity = String(1 - t);
             } else {
               // EXIT FLASH OUT — reveal next section
               const t = (p - 0.96) / 0.04;
               flash.style.opacity = String(1 - t);
               video.style.opacity = "0";
               track.style.opacity = "0";
+              hud.style.opacity = "0";
               isActiveRef.current = false;
               // Remove the black background so it doesn't peek through
               overlay.style.background = "transparent";
@@ -166,12 +229,62 @@ export function VideoScrollSequence() {
           <div ref={thumbRef} className={styles.scrollThumb} />
         </div>
 
+        {/* HUD Overlay */}
+        <div ref={hudRef} className={styles.hudOverlay}>
+          {/* Top Left - System Core */}
+          <div className={styles.hudTopLeft}>
+            <span className={styles.hudLabel}>Kernel</span>
+            <span className={styles.hudValue}>Linux 6.9-arch1-1</span>
+            <span className={styles.hudLabel}>Heap Usage</span>
+            <span className={styles.hudValue}><span ref={heapRef}>120.4</span> MB</span>
+            <span className={styles.hudLabel}>Entropy Hash</span>
+            <span className={styles.hudValue} ref={entropyRef}>0x4FA9B2</span>
+          </div>
+
+          {/* Top Right - Dev Environment */}
+          <div className={styles.hudTopRight}>
+            <span className={styles.hudLabel}>Editor</span>
+            <span className={styles.hudValue}>Neovim v0.10.0</span>
+            <span className={styles.hudLabel}>Indentation</span>
+            <span className={styles.hudValue}>2 Spaces</span>
+            <span className={styles.hudLabel}>Caffeine : LOC</span>
+            <span className={styles.hudValue}><span ref={cafRef}>1.2</span> mg</span>
+          </div>
+
+          {/* Bottom Left - Hardware / Network */}
+          <div className={styles.hudBottomLeft}>
+            <span className={styles.hudLabel}>Switches</span>
+            <span className={styles.hudValue} style={{ color: "#a8a29e" }}>Cherry MX Brown</span>
+          </div>
+
+          {/* Bottom Right */}
+          <div className={styles.hudBottomRight}>
+            <span className={styles.hudLabel}>Target</span>
+            <div style={{ position: "relative", height: "1.2rem", width: "100px" }}>
+              <span 
+                className={styles.hudValue} 
+                ref={worksTargetRef} 
+                style={{ position: "absolute", right: 0, transition: "opacity 0.4s ease", opacity: 1, whiteSpace: "nowrap" }}
+              >
+                MY WORKS
+              </span>
+              <span 
+                className={styles.hudValue} 
+                ref={aboutTargetRef} 
+                style={{ position: "absolute", right: 0, transition: "opacity 0.4s ease", opacity: 0, whiteSpace: "nowrap" }}
+              >
+                ABOUT ME
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Flash layer */}
         <div ref={flashRef} className={styles.flash} />
       </div>
 
       {/* Spacer — lives in document flow between About and My Work */}
-      <div ref={spacerRef} className={styles.spacer} data-nav-theme="dark" />
+      <div ref={spacerRef} className={styles.spacer} data-nav-theme="hidden" />
     </>
   );
 }

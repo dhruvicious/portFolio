@@ -60,3 +60,67 @@
   height: 900vh;
   pointer-events: none;
 }
+
+/* ─── HUD Overlay ─── */
+.hudOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5; /* Above video, below flash */
+  pointer-events: none;
+  opacity: 0; /* Fades in via GSAP */
+  will-change: opacity;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+/* Corner positions */
+.hudTopLeft {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hudTopRight {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: right;
+}
+
+.hudBottomLeft {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hudBottomRight {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: right;
+}
+
+.hudLabel {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.hudValue {
+  font-weight: 600;
+  color: #fff;
+}
