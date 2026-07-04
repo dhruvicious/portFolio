@@ -1,0 +1,38 @@
+.sectionHome {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  overflow: hidden;
+}
+
+.heroImage {
+  object-fit: cover;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.heroHint {
+  position: absolute;
+  bottom: 6rem;
+  text-align: center;
+  z-index: 10;
+  user-select: none;
+  color: rgba(0, 0, 0, 0.4);
+  font-family: monospace;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+:global(.dark) .heroHint {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

@@ -114,85 +114,52 @@ export function VideoScrollSequence() {
             // Show/hide the fixed overlay
             if (p > 0.001 && p < 0.999) {
               overlay.style.visibility = "visible";
-            } else {
-              overlay.style.visibility = "hidden";
-            }
-
-            if (p <= 0.04) {
-              // ENTER FLASH IN
-              const t = p / 0.04;
-              flash.style.opacity = String(t);
-              video.style.opacity = "0";
-              track.style.opacity = "0";
-              hud.style.opacity = "0";
-              isActiveRef.current = false;
-              overlay.style.background = "#000";
-            } else if (p <= 0.08) {
-              // ENTER FLASH OUT — reveal video
-              const t = (p - 0.04) / 0.04;
-              flash.style.opacity = String(1 - t);
-              video.style.opacity = "1";
-              track.style.opacity = String(t);
-              hud.style.opacity = String(t);
-              isActiveRef.current = true;
-              targetTimeRef.current = 0;
-            } else if (p <= 0.92) {
-              // SCRUB VIDEO — set TARGET time, the lerp loop handles the rest
-              flash.style.opacity = "0";
               video.style.opacity = "1";
               track.style.opacity = "1";
               hud.style.opacity = "1";
               isActiveRef.current = true;
-
-              const videoProgress = (p - 0.08) / 0.84;
-              targetTimeRef.current = videoProgress * dur;
+              
+              // Map the entire scroll progress to the video
+              targetTimeRef.current = p * dur;
 
               // Move the scroll thumb
               const trackHeight = track.offsetHeight;
               const thumbHeight = thumb.offsetHeight;
               const maxTravel = trackHeight - thumbHeight;
-              thumb.style.top = `${videoProgress * maxTravel}px`;
+              thumb.style.top = `${p * maxTravel}px`;
 
               // Update Nerd Paradise HUD Stats
-              
-              // Actual Live Memory Usage (JS Heap) using the browser's performance API
               if (heapRef.current) {
                 const mem = (performance as any).memory;
                 if (mem && mem.usedJSHeapSize) {
                   const mb = mem.usedJSHeapSize / (1024 * 1024);
                   heapRef.current.innerText = mb.toFixed(1);
                 } else {
-                  // Fallback jitter for Safari/Firefox which don't expose memory API
                   heapRef.current.innerText = (120 + Math.random() * 5).toFixed(1);
                 }
               }
               
-              // Random hex string to simulate entropy or commit hashes
               if (entropyRef.current) entropyRef.current.innerText = "0x" + Math.random().toString(16).substring(2, 8).toUpperCase();
-              
-              // Caffeine ticking up slowly based on scroll
-              if (cafRef.current) cafRef.current.innerText = (1.2 + videoProgress * 2.8).toFixed(1);
+              if (cafRef.current) cafRef.current.innerText = (1.2 + p * 2.8).toFixed(1);
 
-            } else if (p <= 0.96) {
-              // EXIT FLASH IN
-              const t = (p - 0.92) / 0.04;
-              flash.style.opacity = String(t);
-              video.style.opacity = "1";
-              targetTimeRef.current = dur;
-              track.style.opacity = String(1 - t);
-              hud.style.opacity = String(1 - t);
             } else {
-              // EXIT FLASH OUT — reveal next section
-              const t = (p - 0.96) / 0.04;
-              flash.style.opacity = String(1 - t);
-              video.style.opacity = "0";
-              track.style.opacity = "0";
-              hud.style.opacity = "0";
+              overlay.style.visibility = "hidden";
               isActiveRef.current = false;
-              // Remove the black background so it doesn't peek through
-              overlay.style.background = "transparent";
             }
           },
+          onEnter: () => {
+            gsap.fromTo(flash, { opacity: 0 }, { opacity: 1, duration: 0.15, yoyo: true, repeat: 1 });
+            overlay.style.background = "transparent";
+          },
+          onLeave: () => {
+            gsap.fromTo(flash, { opacity: 0 }, { opacity: 1, duration: 0.15, yoyo: true, repeat: 1 });
+          },
+          onEnterBack: () => {
+            gsap.fromTo(flash, { opacity: 0 }, { opacity: 1, duration: 0.15, yoyo: true, repeat: 1 });
+          },
+          onLeaveBack: () => {
+            gsap.fromTo(flash, { opacity: 0 }, { opacity: 1, duration: 0.15, yoyo: true, repeat: 1 });
+          }
         });
       };
 
