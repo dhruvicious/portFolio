@@ -166,7 +166,6 @@ export function Navbar() {
     return { left, width: expandedWidths[index] || collapsedWidth };
   };
 
-  // Scroll to section when pill is clicked
   const handlePillClick = (index: number, id: string) => {
     // Disable scrollspy updates during the scroll transition
     isNavClickScrollRef.current = true;
@@ -179,9 +178,25 @@ export function Navbar() {
       element.scrollIntoView({ behavior: "smooth" });
     }
 
-    scrollTimeoutRef.current = setTimeout(() => {
-      isNavClickScrollRef.current = false;
-    }, 1000); // Allow 1s for the smooth scroll to complete
+    // Use a scroll listener to detect when smooth scrolling finishes
+    const checkScrollEnd = () => {
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+      scrollTimeoutRef.current = setTimeout(() => {
+        isNavClickScrollRef.current = false;
+        window.removeEventListener("scroll", checkScrollEnd);
+        
+        // When scroll ends, force an update based on the current intersecting sections
+        // Wait for next tick so any pending observer callbacks have fired
+        setTimeout(() => {
+          if (!isNavClickScrollRef.current && activeIndexRef.current !== -1) {
+            // (We could manually trigger an update here, but the observer will naturally be in sync now)
+          }
+        }, 50);
+      }, 150); // 150ms after the last scroll event, consider scrolling finished
+    };
+
+    window.addEventListener("scroll", checkScrollEnd);
+    checkScrollEnd(); // initial call in case no scroll events fire
   };
 
   // Scroll spy (IntersectionObserver) to sync active index with page scroll position
@@ -191,23 +206,13 @@ export function Navbar() {
     const sections = ["home", "about-me", "my-work", "contact-me"];
     const observerOptions = {
       root: null,
-      rootMargin: "-90% 0px -5% 0px", 
+      rootMargin: "-40% 0px -40% 0px", // Use center of viewport for scroll spy
       threshold: 0, // MUST be 0 so massive GSAP pinned sections can trigger it
     };
 
     const intersectingSections = new Set<number>();
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      // If we are currently smooth scrolling from a click/drag, ignore observer updates
-      if (isNavClickScrollRef.current) {
-        return;
-      }
-      
-      // If the user is currently dragging the indicator, ignore scroll spy updates
-      if (indicatorRef.current && Draggable.get(indicatorRef.current)?.isDragging) {
-        return;
-      }
-
       let changed = false;
       entries.forEach((entry) => {
         const index = sections.indexOf(entry.target.id);
@@ -221,6 +226,19 @@ export function Navbar() {
           }
         }
       });
+
+      // ALWAYS update the intersectingSections Set above before returning early!
+      // Otherwise, the Set becomes corrupted during smooth scrolls.
+
+      // If we are currently smooth scrolling from a click/drag, ignore UI updates
+      if (isNavClickScrollRef.current) {
+        return;
+      }
+      
+      // If the user is currently dragging the indicator, ignore scroll spy updates
+      if (indicatorRef.current && Draggable.get(indicatorRef.current)?.isDragging) {
+        return;
+      }
 
       if (changed && intersectingSections.size > 0) {
         const active = Math.max(...Array.from(intersectingSections));
@@ -361,9 +379,16 @@ export function Navbar() {
           element.scrollIntoView({ behavior: "smooth" });
         }
 
-        scrollTimeoutRef.current = setTimeout(() => {
-          isNavClickScrollRef.current = false;
-        }, 1000);
+        const checkScrollEnd = () => {
+          if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+          scrollTimeoutRef.current = setTimeout(() => {
+            isNavClickScrollRef.current = false;
+            window.removeEventListener("scroll", checkScrollEnd);
+          }, 150);
+        };
+
+        window.addEventListener("scroll", checkScrollEnd);
+        checkScrollEnd();
 
         // Spring animate both left and width back to exact grid alignment
         const target = layoutForIdx(closestIdx);
