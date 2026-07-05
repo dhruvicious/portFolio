@@ -28,6 +28,8 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
   const [gameOpen, setGameOpen] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const hasSkippedRef = useRef(false);
+  const tickerLockRef = useRef(false);
+  const scrollLockTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleSkip = () => {
@@ -35,7 +37,13 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
       setShowTab(false); // Immediately hide if it was somehow visible
     };
     window.addEventListener("crawlSkipped", handleSkip);
-    return () => window.removeEventListener("crawlSkipped", handleSkip);
+    return () => {
+      window.removeEventListener("crawlSkipped", handleSkip);
+      if (scrollLockTimeoutRef.current) {
+        clearTimeout(scrollLockTimeoutRef.current);
+      }
+      document.body.style.overflow = "";
+    };
   }, []);
 
   useEffect(() => {
@@ -81,7 +89,6 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
           const scrollWeight = 2.5; // 2.5x more scrolling required for the same distance
           const physicalTravel = panel.scrollHeight * 1.1;
           const scrollDuration = physicalTravel * scrollWeight;
-
           // The container height dictates how far the user actually has to scroll
           gsap.set(container, { height: `calc(${scrollDuration}px + 100vh)` });
           gsap.set(panel, { top: 0 });
@@ -125,8 +132,19 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
 
                   if (self.progress > 0.95) {
                     setShowTicker(true);
+                    if (!tickerLockRef.current) {
+                      tickerLockRef.current = true;
+                      // 500ms lock as requested
+                      document.body.style.overflow = "hidden";
+                      scrollLockTimeoutRef.current = setTimeout(() => {
+                        document.body.style.overflow = "";
+                      }, 500);
+                    }
                   } else {
                     setShowTicker(false);
+                    if (self.progress < 0.5) {
+                      tickerLockRef.current = false;
+                    }
                   }
                 },
               },

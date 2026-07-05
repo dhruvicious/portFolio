@@ -46,7 +46,7 @@ export function Navbar() {
 
     const themeObserverOptions = {
       root: null,
-      rootMargin: "-45% 0px -45% 0px", // narrow band in the middle of the viewport
+      rootMargin: "-85% 0px -10% 0px", // Band near the bottom where the navbar sits
       threshold: 0,
     };
 

@@ -246,9 +246,10 @@ export function VideoScrollSequence() {
           </div>
         </div>
 
-        {/* Flash layer */}
-        <div ref={flashRef} className={styles.flash} />
       </div>
+
+      {/* Flash layer */}
+      <div ref={flashRef} className={styles.flash} />
 
       {/* Spacer — lives in document flow between About and My Work */}
       <div ref={spacerRef} className={styles.spacer} data-nav-theme="hidden" />

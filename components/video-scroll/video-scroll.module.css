@@ -19,12 +19,13 @@
 
 /* Flash layer */
 .flash {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background-color: white;
   opacity: 0;
   will-change: opacity;
-  z-index: 10;
+  z-index: 110;
+  pointer-events: none;
 }
 
 /* ─── Discrete Scroll Track ─── */
