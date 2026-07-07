@@ -48,10 +48,10 @@ export function StarWarsIntroText() {
       // Scrub logic:
       // 0-25%: fade in
       // 25-75%: stay solid
-      // 75-100%: fade out
-      tl.to(textRef.current, { opacity: 1, duration: 0.25 })
-        .to(textRef.current, { opacity: 1, duration: 0.5 })
-        .to(textRef.current, { opacity: 0, duration: 0.25 });
+      // 75-100%: fade out (autoAlpha ensures it becomes visibility: hidden and loses pointer events)
+      tl.to(textRef.current, { autoAlpha: 1, duration: 0.25 })
+        .to(textRef.current, { autoAlpha: 1, duration: 0.5 })
+        .to(textRef.current, { autoAlpha: 0, duration: 0.25 });
 
       return true;
     };

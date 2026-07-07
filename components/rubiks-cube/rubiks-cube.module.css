@@ -1,0 +1,165 @@
+.containerTransparent {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+  pointer-events: none;
+}
+
+.containerTransparent > * {
+  pointer-events: auto;
+}
+
+.fullscreenWrapper {
+  max-width: 100vw !important;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(to bottom, #0f172a, #020617);
+}
+
+.unifiedNavbar {
+  position: absolute;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  pointer-events: auto;
+  
+  /* Make it distinctly frosted glass */
+  background: rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 6px rgba(255, 255, 255, 0.1),
+    0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.navDivider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 4px;
+}
+
+.navButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  transition: background 0.3s ease, transform 0.12s ease;
+}
+
+.navButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.navButton:active {
+  transform: scale(0.92);
+}
+
+.navButton svg {
+  width: 18px;
+  height: 18px;
+  stroke: #ffffff;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+.canvasContainer {
+  position: relative;
+  width: 100%;
+  height: 600px;
+}
+
+.canvasContainerFullscreen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.canvasContainerResponsive {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.grabCursor {
+  cursor: grab;
+}
+
+.grabCursor:active {
+  cursor: grabbing;
+}
+
+.closeButton {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  padding: 0.75rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  z-index: 110;
+  pointer-events: auto;
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.faceButton {
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 150ms ease-in-out, box-shadow 150ms ease;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  padding: 0;
+  margin: 0 2px;
+}
+
+.faceButton:hover {
+  transform: scale(1.2);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+}
+
+.faceButton:active {
+  transform: scale(0.9);
+}

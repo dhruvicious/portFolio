@@ -1,10 +1,58 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+import { RubiksCube } from "@/components/rubiks-cube";
 import styles from "./video-scroll.module.css";
+
+function VideoBackground({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement> }) {
+  const { viewport } = useThree();
+  const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      const tex = new THREE.VideoTexture(videoRef.current);
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      setTexture(tex);
+    }
+  }, [videoRef]);
+
+  useFrame(() => {
+    if (texture) {
+      texture.needsUpdate = true;
+    }
+  });
+
+  if (!texture) return null;
+
+  const videoAspect = videoRef.current && videoRef.current.videoWidth 
+    ? videoRef.current.videoWidth / videoRef.current.videoHeight 
+    : 16 / 9;
+
+  const viewportAspect = viewport.width / viewport.height;
+  
+  let scaleX = viewport.width;
+  let scaleY = viewport.height;
+  
+  if (viewportAspect > videoAspect) {
+    scaleY = viewport.width / videoAspect;
+  } else {
+    scaleX = viewport.height * videoAspect;
+  }
+
+  return (
+    <mesh scale={[scaleX, scaleY, 1]}>
+      <planeGeometry args={[1, 1]} />
+      <meshBasicMaterial map={texture} toneMapped={false} depthTest={false} />
+    </mesh>
+  );
+}
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +71,21 @@ export function VideoScrollSequence() {
   const cafRef = useRef<HTMLSpanElement>(null);
   const worksTargetRef = useRef<HTMLSpanElement>(null);
   const aboutTargetRef = useRef<HTMLSpanElement>(null);
+
+  // Easter Egg State
+  const [isCubeExpanded, setIsCubeExpanded] = useState(false);
+  const scrollProgressRef = useRef(0);
+
+  // Disable page scrolling when the Rubik's cube is expanded in focus
+  useEffect(() => {
+    if (isCubeExpanded) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isCubeExpanded]);
 
   // Smooth playback state — lives outside React render cycle for performance
   const targetTimeRef = useRef(0);
@@ -57,23 +120,28 @@ export function VideoScrollSequence() {
 
     rafRef.current = requestAnimationFrame(tick);
 
-    // WAKE UP FIX: When returning to the tab, the browser often suspends the video decoder.
+    // WAKE UP FIX: When returning to the tab or refocusing the window, the browser often suspends the video decoder.
     // Playing and immediately pausing it forces the browser to wake the video back up.
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible" && videoRef.current) {
-        videoRef.current.play().then(() => {
-          videoRef.current?.pause();
-        }).catch(() => {
-          // Ignore play interruption errors
-        });
+    const wakeUpVideo = () => {
+      if (videoRef.current) {
+        // Only attempt to wake up if the document is actually visible
+        if (document.visibilityState === "visible") {
+          videoRef.current.play().then(() => {
+            videoRef.current?.pause();
+          }).catch(() => {
+            // Ignore play interruption errors
+          });
+        }
       }
     };
     
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    document.addEventListener("visibilitychange", wakeUpVideo);
+    window.addEventListener("focus", wakeUpVideo);
 
     return () => {
       cancelAnimationFrame(rafRef.current);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.removeEventListener("visibilitychange", wakeUpVideo);
+      window.removeEventListener("focus", wakeUpVideo);
     };
   }, []);
 
@@ -142,6 +210,9 @@ export function VideoScrollSequence() {
               if (entropyRef.current) entropyRef.current.innerText = "0x" + Math.random().toString(16).substring(2, 8).toUpperCase();
               if (cafRef.current) cafRef.current.innerText = (1.2 + p * 2.8).toFixed(1);
 
+              // Update progress for WebGL easter egg
+              scrollProgressRef.current = p;
+
             } else {
               overlay.style.visibility = "hidden";
               isActiveRef.current = false;
@@ -189,15 +260,31 @@ export function VideoScrollSequence() {
           playsInline
           muted
           preload="auto"
+          style={{ display: "none" }} // Hidden, used only as WebGL texture source
         />
 
+        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
+          <Canvas orthographic camera={{ position: [0, 0, 1], zoom: 1 }}>
+            <VideoBackground videoRef={videoRef} />
+          </Canvas>
+        </div>
+
         {/* Discrete scroll indicator */}
-        <div ref={trackRef} className={styles.scrollTrack}>
+        <div ref={trackRef} className={styles.scrollTrack} style={{ zIndex: 10 }}>
           <div ref={thumbRef} className={styles.scrollThumb} />
         </div>
 
         {/* HUD Overlay */}
-        <div ref={hudRef} className={styles.hudOverlay}>
+        <div 
+          ref={hudRef} 
+          className={styles.hudOverlay} 
+          style={{ 
+            zIndex: 10,
+            opacity: isCubeExpanded ? 0 : 1,
+            pointerEvents: isCubeExpanded ? "none" : "auto",
+            transition: "opacity 0.4s ease"
+          }}
+        >
           {/* Top Left - System Core */}
           <div className={styles.hudTopLeft}>
             <span className={styles.hudLabel}>Kernel</span>
@@ -243,6 +330,35 @@ export function VideoScrollSequence() {
                 ABOUT ME
               </span>
             </div>
+          </div>
+        </div>
+
+        {/* Easter Egg: The Actual Interactive Cube */}
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: 9999,
+            pointerEvents: "none",
+            backgroundColor: isCubeExpanded ? "rgba(0, 0, 0, 0.6)" : "transparent",
+            backdropFilter: isCubeExpanded ? "blur(12px)" : "none",
+            WebkitBackdropFilter: isCubeExpanded ? "blur(12px)" : "none",
+            transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        >
+          <div style={{ width: "100%", height: "100%", pointerEvents: "auto" }}>
+            <RubiksCube 
+              transparent={true} 
+              fullscreen={true} 
+              interactive={isCubeExpanded}
+              isExpanded={isCubeExpanded}
+              onExpand={() => setIsCubeExpanded(true)}
+              onClose={() => setIsCubeExpanded(false)}
+              scrollProgress={scrollProgressRef}
+            />
           </div>
         </div>
 
