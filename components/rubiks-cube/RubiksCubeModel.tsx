@@ -219,7 +219,7 @@ export const RubiksCubeModel = forwardRef<
         outerGroupRef.current.quaternion.copy(targetQuat);
         cubeAnim.current = null;
       }
-    } else if (outerGroupRef.current) {
+    } else if (outerGroupRef.current && props.interactive) {
       const rotSpeed = Math.PI * dt * 1.5;
       let rotX = 0, rotY = 0, rotZ = 0;
       if (keys.current["w"]) rotX -= rotSpeed;
