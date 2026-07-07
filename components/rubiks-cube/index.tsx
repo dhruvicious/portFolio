@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, TrackballControls, PerspectiveCamera } from "@react-three/drei";
