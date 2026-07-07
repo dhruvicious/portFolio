@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { RubiksCube } from "@/components/rubiks-cube";
 import styles from "./video-scroll.module.css";
 
-function VideoBackground({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement> }) {
+function VideoBackground({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement | null> }) {
   const { viewport } = useThree();
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
 
