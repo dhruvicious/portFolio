@@ -132,19 +132,8 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
 
                   if (self.progress > 0.95) {
                     setShowTicker(true);
-                    if (!tickerLockRef.current) {
-                      tickerLockRef.current = true;
-                      // 500ms lock as requested
-                      document.body.style.overflow = "hidden";
-                      scrollLockTimeoutRef.current = setTimeout(() => {
-                        document.body.style.overflow = "";
-                      }, 500);
-                    }
                   } else {
                     setShowTicker(false);
-                    if (self.progress < 0.5) {
-                      tickerLockRef.current = false;
-                    }
                   }
                 },
               },

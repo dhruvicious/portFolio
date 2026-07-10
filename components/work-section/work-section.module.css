@@ -1,18 +1,33 @@
 .scrollContainer {
   position: relative;
   width: 100%;
-  height: 200vh;
+  padding: 6rem 0;
+  background-color: #000;
 }
 
-.stickySection {
-  position: sticky;
+.shaderContainer {
+  position: absolute;
   top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  clip-path: inset(0); /* Bulletproof crop for fixed children */
+}
+
+.shaderSticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
 .sectionHeading {
@@ -21,8 +36,232 @@
   letter-spacing: -0.04em;
   text-transform: uppercase;
   color: black;
+  margin-bottom: 4rem;
+  text-align: center;
+  padding: 0 2rem;
 }
 
 :global(.dark) .sectionHeading {
   color: white;
 }
+
+.categoriesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+
+.categorySection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.categoryTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: white; /* Bright white for dark background */
+  background: rgba(255, 255, 255, 0.05); /* Subtle frosted look */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  align-self: flex-start;
+  margin-bottom: 0.5rem;
+  margin-left: 2rem; /* Align with card content */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.projectsList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.projectCard {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 2rem 2rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+/* 1. Opaque background (Default state) */
+.projectCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: #050505;
+  z-index: 0;
+  opacity: 1;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+
+/* 2. Blurred glass background (Hover state) - Copied exactly from Navbar */
+.projectCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.75);
+  backdrop-filter: blur(16px) saturate(1.35);
+  -webkit-backdrop-filter: blur(16px) saturate(1.35);
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+
+.projectCard:hover::before {
+  opacity: 0;
+}
+
+.projectCard:hover::after {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .projectCard {
+    padding: 2rem 5%;
+  }
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.titleWrapper {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.projectTitleOriginal, .projectTitleHover {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900;
+  margin: 0;
+  text-transform: uppercase;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1.1;
+  padding-bottom: 0.1em; /* Prevent clipping of descenders */
+  color: white; /* Always white */
+}
+
+.projectTitleOriginal {
+  transform: translateY(0);
+}
+
+.projectTitleHover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  transform: translateY(0);
+}
+
+/* On card hover, both titles slide UP by exactly 100% of their container */
+.projectCard:hover .projectTitleOriginal {
+  transform: translateY(-100%);
+}
+
+.projectCard:hover .projectTitleHover {
+  transform: translateY(-100%);
+}
+
+.expandedArea {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.projectCard:hover .expandedArea {
+  grid-template-rows: 1fr;
+}
+
+.expandedInner {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 0;
+  transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.projectCard:hover .expandedInner {
+  padding-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .expandedInner {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+  .projectCard:hover .expandedInner {
+    padding-top: 1.5rem;
+  }
+}
+
+.leftCol {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+}
+
+.projectSubtitle {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease, color 0.3s;
+  transition-delay: 0s;
+}
+
+.projectCard:hover .projectSubtitle {
+  transform: translateY(0);
+  opacity: 1;
+  color: white;
+  transition-delay: 0.05s;
+}
+
+.rightCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.projectDescription {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  transform: translateY(30px);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease, color 0.3s;
+  transition-delay: 0s;
+  max-width: 600px;
+}
+
+.projectCard:hover .projectDescription {
+  transform: translateY(0);
+  opacity: 1;
+  color: white;
+  transition-delay: 0.15s;
+}
+
+

@@ -1,12 +1,86 @@
 "use client";
 
+import { useRef } from "react";
+import { Canvas } from "@react-three/fiber";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ShaderBackground } from "@/components/video-scroll";
 import styles from "./work-section.module.css";
+import projects from "../../lib/projects.json";
 
 export function WorkSection() {
+  const containerRef = useRef<HTMLElement>(null);
+  const scrollProgressRef = useRef<number>(0);
+
+  useGSAP(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top bottom",
+      end: "bottom top",
+      onUpdate: (self) => {
+        scrollProgressRef.current = self.progress;
+      }
+    });
+  }, { scope: containerRef });
+  // Group projects by type
+  const groupedProjects = projects.reduce((acc, project) => {
+    const { type } = project;
+    if (!acc[type]) {
+      acc[type] = [];
+    }
+    acc[type].push(project);
+    return acc;
+  }, {} as Record<string, typeof projects>);
+
   return (
-    <section id="my-work" className={styles.scrollContainer} data-nav-theme="light">
-      <div className={styles.stickySection}>
-        <h2 className={styles.sectionHeading}>My Work</h2>
+    <section ref={containerRef} id="my-work" className={styles.scrollContainer} data-nav-theme="dark">
+      <div className={styles.shaderContainer}>
+        <div className={styles.shaderSticky}>
+          <Canvas orthographic camera={{ position: [0, 0, 1], zoom: 1 }} dpr={[1, 1.5]}>
+            <ShaderBackground scrollProgressRef={scrollProgressRef} />
+          </Canvas>
+        </div>
+      </div>
+
+      <div className={styles.contentWrapper}>
+        <div className={styles.categoriesContainer}>
+          {Object.entries(groupedProjects).map(([category, items]) => (
+            <div key={category} className={styles.categorySection}>
+              <h3 className={styles.categoryTitle}>{category}</h3>
+              <div className={styles.projectsList}>
+                {items.map((project, index) => (
+                  <a 
+                    key={index} 
+                    href={project.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={styles.projectCard}
+                  >
+                    <div className={styles.cardTop}>
+                      <div className={styles.titleWrapper}>
+                        <h4 className={styles.projectTitleOriginal}>{project.title}</h4>
+                        <h4 className={styles.projectTitleHover}>{project.title}</h4>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.expandedArea}>
+                      <div className={styles.expandedInner}>
+                        <div className={styles.leftCol}>
+                          <h5 className={styles.projectSubtitle}>{project.subtitle}</h5>
+                        </div>
+                        <div className={styles.rightCol}>
+                          <p className={styles.projectDescription}>{project.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

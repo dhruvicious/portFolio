@@ -1,0 +1,68 @@
+[
+  {
+    "title": "Project One",
+    "subtitle": "E-Commerce Platform",
+    "description": "A fully responsive e-commerce platform built with Next.js and Tailwind CSS. Features include user authentication, product search, and a complete checkout flow.",
+    "link": "https://github.com/project-one",
+    "type": "Web Applications",
+    "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop"
+  },
+  {
+    "title": "Project Two",
+    "subtitle": "Task Management App",
+    "description": "A drag-and-drop task management tool using React and Node.js. It helps teams organize their work efficiently with real-time updates.",
+    "link": "https://github.com/project-two",
+    "type": "Web Applications",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
+  },
+  {
+    "title": "Project Three",
+    "subtitle": "AI Chatbot Interface",
+    "description": "An intuitive chatbot interface integrating OpenAI API. Built with smooth animations and dynamic components for an enhanced user experience.",
+    "link": "https://github.com/project-three",
+    "type": "AI & Machine Learning",
+    "image": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=2574&auto=format&fit=crop"
+  },
+  {
+    "title": "Project Four",
+    "subtitle": "Portfolio Template",
+    "description": "A modern and minimalistic portfolio template designed for developers and designers to showcase their work effectively.",
+    "link": "https://github.com/project-four",
+    "type": "Templates & Design"
+  },
+  {
+    "title": "Project Five",
+    "subtitle": "Crypto Dashboard",
+    "description": "A real-time cryptocurrency tracking dashboard featuring live WebSocket data feeds, interactive WebGL charts, and portfolio management tools.",
+    "link": "https://github.com/project-five",
+    "type": "Web Applications"
+  },
+  {
+    "title": "Project Six",
+    "subtitle": "Neural Style Transfer",
+    "description": "A deep learning application that applies the stylistic elements of famous artworks to user-uploaded photos using TensorFlow.js in the browser.",
+    "link": "https://github.com/project-six",
+    "type": "AI & Machine Learning"
+  },
+  {
+    "title": "Project Seven",
+    "subtitle": "Design System UI",
+    "description": "A comprehensive React component library and design system built with Storybook, featuring accessible components and a sleek, customizable token system.",
+    "link": "https://github.com/project-seven",
+    "type": "Templates & Design"
+  },
+  {
+    "title": "Project Eight",
+    "subtitle": "Spatial Audio Engine",
+    "description": "An experimental Web Audio API application for producing 3D binaural soundscapes in real-time, designed for immersive web experiences.",
+    "link": "https://github.com/project-eight",
+    "type": "Creative Coding"
+  },
+  {
+    "title": "Project Nine",
+    "subtitle": "Generative Art Canvas",
+    "description": "A WebGL-powered generative art platform that creates infinite, evolving landscapes based on mathematical noise algorithms.",
+    "link": "https://github.com/project-nine",
+    "type": "Creative Coding"
+  }
+]

@@ -1,31 +1,10 @@
-/* The fixed overlay that covers the entire viewport.
-   Hidden by default, made visible via JS when scrolling into the spacer. */
-.fixedOverlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  visibility: hidden;
-  pointer-events: none;
-  background: #000;
-}
-
-.video {
+.relativeContainer {
+  position: relative;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  will-change: opacity;
-}
-
-/* Flash layer */
-.flash {
-  position: fixed;
-  inset: 0;
-  background-color: white;
-  opacity: 0;
-  will-change: opacity;
-  z-index: 110;
-  pointer-events: none;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  z-index: 10;
 }
 
 /* ─── Discrete Scroll Track ─── */
@@ -52,14 +31,6 @@
   background: rgba(255, 255, 255, 0.35);
   border-radius: 2px;
   transition: background 0.2s ease;
-}
-
-/* ─── Scroll Spacer ─── */
-.spacer {
-  position: relative;
-  width: 100%;
-  height: 900vh;
-  pointer-events: none;
 }
 
 /* ─── HUD Overlay ─── */

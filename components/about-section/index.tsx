@@ -20,9 +20,9 @@ export function AboutSection() {
   if (aboutParagraphs.length === 0) return null;
 
   return (
-    <>
+    <section id="about-me">
       <AboutCrawl title="ABOUT ME" paragraphs={aboutParagraphs} />
       <VideoScrollSequence />
-    </>
+    </section>
   );
 }
