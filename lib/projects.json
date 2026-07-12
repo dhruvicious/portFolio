@@ -1,11 +1,10 @@
 [
   {
-    "title": "Project One",
-    "subtitle": "E-Commerce Platform",
-    "description": "A fully responsive e-commerce platform built with Next.js and Tailwind CSS. Features include user authentication, product search, and a complete checkout flow.",
-    "link": "https://github.com/project-one",
-    "type": "Web Applications",
-    "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop"
+    "title": "Portfolio Site",
+    "subtitle": "Recursion?",
+    "description": "A website made to showcase my skills and projects",
+    "link": "https://bedhruvicious.co.in",
+    "type": "Web Design"
   },
   {
     "title": "Project Two",

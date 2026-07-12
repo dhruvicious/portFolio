@@ -8,6 +8,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Canvas } from "@react-three/fiber";
 import { ShaderBackground } from "@/components/video-scroll";
+import socialsData from "@/lib/socials.json";
 
 const LinkedinIcon = (props: any) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" {...props}>
@@ -56,42 +57,42 @@ const CONTACT_ITEMS = [
     className: styles.itemLinkedin,
     bgClass: "bg-[#0077b5]",
     icon: LinkedinIcon,
-    link: "https://www.linkedin.com/in/alphacupcake10/",
+    link: socialsData.linkedin,
   },
   {
     id: "github",
     className: styles.itemGithub,
     bgClass: "bg-[#222222]",
     icon: GithubIcon,
-    link: "https://github.com/dhruvicious",
+    link: socialsData.github,
   },
   {
     id: "twitter",
     className: styles.itemTwitter,
     bgClass: "bg-[#14171A]",
     icon: TwitterIcon,
-    link: "https://twitter.com/alphacupcake10/",
+    link: socialsData.twitter,
   },
   {
     id: "youtube",
     className: styles.itemYoutube,
     bgClass: "bg-[#FF0000]",
     icon: YoutubeIcon,
-    link: "https://www.youtube.com/c/AlphaCupcake10",
+    link: socialsData.youtube,
   },
   {
     id: "email",
     className: styles.itemEmail,
     bgClass: "bg-gradient-to-r from-sky-400 to-blue-500",
     icon: EmailIcon,
-    link: "mailto:alphacupcake@outlook.com",
+    link: socialsData.email,
   },
   {
     id: "instagram",
     className: styles.itemInstagram,
     bgClass: "bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500",
     icon: Instagram,
-    link: "https://www.instagram.com/alphacupcake10/",
+    link: socialsData.instagram,
   }
 ];
 
