@@ -11,7 +11,7 @@ import styles from "./video-scroll.module.css";
 
 export function ShaderBackground({ scrollProgressRef }: { scrollProgressRef: React.MutableRefObject<number> }) {
   const { viewport } = useThree();
-  const materialRef = useRef<any>();
+  const materialRef = useRef<any>(null);
 
   const uniforms = useMemo(() => ({
     uProgress: { value: 0 },

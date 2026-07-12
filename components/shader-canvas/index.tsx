@@ -49,7 +49,7 @@ const fragmentShader = `
 `;
 
 function LiquidMaterial() {
-  const materialRef = useRef<any>();
+  const materialRef = useRef<any>(null);
   
   const uniforms = useMemo(
     () => ({
