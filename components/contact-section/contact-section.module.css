@@ -1,22 +1,365 @@
 .sectionContact {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  user-select: none;
-  padding-bottom: 6rem;
+  padding: 8rem 2rem;
+  background-color: #000;
+  color: white;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.shaderContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  pointer-events: none;
+  clip-path: inset(0);
+}
+
+.shaderSticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.headerContainer {
+  position: relative;
+  margin-top: -6rem; /* Move box significantly higher */
+  margin-bottom: 6rem;
+  padding: 1.5rem 6rem 1.5rem 2rem;
+  display: flex; /* Prevent shrink-to-fit layout shifts */
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 650px;
+  height: 80px; /* Rigid height */
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.headerDrawBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 0;
+  border: 3px solid #38bdf8; /* Bold Figma blue during drawing */
+  border-radius: 0px; /* Starts as sharp rectangle */
+  opacity: 0;
+  pointer-events: none;
+  background-color: transparent;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.radiusDot {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  border: 2px solid #0ea5e9;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  transform: translate(-50%, -50%); /* Center dot perfectly on the coordinates */
+}
+
+.headerDrawBox.focused {
+  background-color: rgba(0, 0, 0, 0.3); /* Subtle dark tint */
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
 }
 
 .sectionHeading {
-  font-size: clamp(3rem, 7vw, 4.5rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-  color: black;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 500;
+  color: #e2e8f0;
+  margin: 0;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
-:global(.dark) .sectionHeading {
+.caret {
+  display: inline-block;
+  width: 10px;
+  height: clamp(1.2rem, 3vw, 2.2rem);
+  background-color: #38bdf8;
+  margin-left: 8px;
+  opacity: 0;
+}
+
+.caret.active {
+  opacity: 1;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.searchIcon {
+  position: relative;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 1.5rem;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.4s ease, transform 0.4s ease, color 0.4s ease;
+  flex-shrink: 0;
+}
+
+.searchIcon.active {
+  opacity: 1;
+  transform: scale(1);
+  color: #38bdf8;
+}
+
+.cmdBadge {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%) scale(0.8);
+  z-index: 2;
+  display: flex;
+  gap: 0.4rem;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.cmdBadge.active {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.cmdBadge span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.bentoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  height: 550px;
+  transition: grid-template-columns 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+              grid-template-rows 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bentoItem {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  border-radius: 1.5rem;
+  transition: transform 0.3s ease;
+  pointer-events: none; /* Disabled until drawn */
+}
+
+.drawBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border: 3px solid #38bdf8; /* Bold Figma blue during drawing */
+  border-radius: 0px; /* Starts as sharp rectangle */
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-color: transparent;
+  box-sizing: border-box;
+}
+
+.bentoContent {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(20px);
+  z-index: 2;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.iconContainer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.centerIcon {
+  width: 64px;
+  height: 64px;
   color: white;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bentoItem:hover .centerIcon {
+  transform: scale(1.15);
+}
+
+/* Figma Selection & Resizing Dots */
+.resizeFrame {
+  position: absolute;
+  inset: 0; /* Exactly bounds the tile */
+  border: 3px solid #38bdf8; /* Brighter, thicker selection blue */
+  /* Strictly rectangular, no border-radius */
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.3s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 
+              0 0 0 1px rgba(0, 0, 0, 0.3); /* Sharp dark stroke to separate from background */
+}
+
+.bentoItem:hover .resizeFrame {
+  opacity: 1;
+}
+
+.anchorDot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background-color: white;
+  border: 3px solid #38bdf8; /* Bold blue border */
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 
+              0 0 0 1px rgba(0, 0, 0, 0.3); /* Shadow ensures it pops */
+}
+
+/* Centered perfectly on the thicker 3px border corners (-1.5px center offset - 7px half-width = -8.5px) */
+.anchorDot.tl { top: -8.5px; left: -8.5px; }
+.anchorDot.tr { top: -8.5px; right: -8.5px; }
+.anchorDot.bl { bottom: -8.5px; left: -8.5px; }
+.anchorDot.br { bottom: -8.5px; right: -8.5px; }
+
+/* Figma Cursors */
+.globalCursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.cursorSvg {
+  width: 24px;
+  height: 36px;
+  transform: translate(-10%, -5%);
+}
+
+.cursorName {
+  position: absolute;
+  top: 32px;
+  left: 20px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.hiddenInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+/* Grid areas for 6 items in a 4x2 layout */
+@media (min-width: 769px) {
+  /* Row 1: Professional (Left), Creative (Right) */
+  .itemLinkedin { grid-column: 1 / 2; grid-row: 1 / 2; }
+  .itemGithub { grid-column: 2 / 3; grid-row: 1 / 2; }
+  .itemTwitter { grid-column: 3 / 4; grid-row: 1 / 2; }
+  .itemYoutube { grid-column: 4 / 5; grid-row: 1 / 2; }
+  
+  /* Row 2 */
+  .itemEmail { grid-column: 1 / 3; grid-row: 2 / 3; }
+  .itemInstagram { grid-column: 3 / 5; grid-row: 2 / 3; }
+
+  /* Fluid Expansion Hover States (Resizing Logic) */
+  /* Row 1 */
+  .bentoGrid.hover_linkedin {
+    grid-template-columns: 1.4fr 0.8fr 0.8fr 0.8fr;
+    grid-template-rows: 1.2fr 0.8fr;
+  }
+  .bentoGrid.hover_github {
+    grid-template-columns: 0.8fr 1.4fr 0.8fr 0.8fr;
+    grid-template-rows: 1.2fr 0.8fr;
+  }
+  .bentoGrid.hover_twitter {
+    grid-template-columns: 0.8fr 0.8fr 1.4fr 0.8fr;
+    grid-template-rows: 1.2fr 0.8fr;
+  }
+  .bentoGrid.hover_youtube {
+    grid-template-columns: 0.8fr 0.8fr 0.8fr 1.4fr;
+    grid-template-rows: 1.2fr 0.8fr;
+  }
+
+  /* Row 2 */
+  .bentoGrid.hover_email {
+    grid-template-columns: 1.2fr 1.2fr 0.8fr 0.8fr;
+    grid-template-rows: 0.8fr 1.2fr;
+  }
+  .bentoGrid.hover_instagram {
+    grid-template-columns: 0.8fr 0.8fr 1.2fr 1.2fr;
+    grid-template-rows: 0.8fr 1.2fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .bentoGrid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    auto-rows: 200px;
+    height: auto;
+  }
+  .itemLinkedin, .itemTwitter, .itemGithub, .itemYoutube, .itemEmail, .itemInstagram { 
+    grid-column: 1 / -1; height: 180px; 
+  }
 }

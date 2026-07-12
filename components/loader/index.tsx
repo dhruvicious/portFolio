@@ -32,51 +32,49 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
     }
   }, [beginExit]);
 
-  const [progress, setProgress] = useState(0);
-  const drawablesRef = useRef<any>(null);
-
-  // Setup the drawable once
+  // Remove React state progress entirely to prevent 50ms re-render jitters
+  // We will drive the animation purely through Anime.js
   useEffect(() => {
     if (!pathRef.current) return;
-    drawablesRef.current = svg.createDrawable(pathRef.current);
-  }, []);
-
-  // Update simulated progress tied to page load
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress(p => {
-        if (p >= 100) return 100;
-        
-        if (pageLoadedRef.current) {
-          // Finish drawing smoothly taking about 1 second if instantly loaded
-          return Math.min(100, p + 5); 
-        } else {
-          // Fake progress asymptotes towards 90%
-          const diff = 90 - p;
-          const increment = Math.max(0.2, diff * 0.05);
-          return Math.min(90, p + increment);
-        }
-      });
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Tie the drawable state to the progress state
-  useEffect(() => {
-    if (!drawablesRef.current) return;
-
-    animate(drawablesRef.current, {
-      draw: `0 ${progress / 100}`,
-      ease: 'linear',
-      duration: 150 // Smoothly catch up to the interval increments
+    
+    // Initialize the drawable
+    const drawable = svg.createDrawable(pathRef.current);
+    let isLoaded = false;
+    
+    // 1. Initial smooth animation targeting 90% completion over 3 seconds
+    const initialAnim = animate(drawable, {
+      draw: '0 0.9',
+      duration: 3000,
+      ease: 'outCubic'
     });
 
-    if (progress >= 100) {
-      animationDoneRef.current = true;
-      tryExit();
-    }
-  }, [progress, tryExit]);
+    // 2. Poll for page load without triggering React renders
+    const checkLoad = setInterval(() => {
+      if (pageLoadedRef.current && !isLoaded) {
+        isLoaded = true;
+        clearInterval(checkLoad);
+        
+        // Pause the initial animation exactly where it is
+        initialAnim.pause();
+        
+        // 3. Smoothly animate the rest of the way to 100%
+        animate(drawable, {
+          draw: '0 1',
+          duration: 600,
+          ease: 'outQuad',
+          onComplete: () => {
+            animationDoneRef.current = true;
+            tryExit();
+          }
+        });
+      }
+    }, 100);
+
+    return () => {
+      clearInterval(checkLoad);
+      initialAnim.pause();
+    };
+  }, [tryExit]);
 
   // Listen for page load
   useEffect(() => {

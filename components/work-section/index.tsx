@@ -34,6 +34,15 @@ export function WorkSection() {
     return acc;
   }, {} as Record<string, typeof projects>);
 
+  // A curated palette of deeper light blueish colors
+  const ACCENT_COLORS = [
+    "#7DD3FC", // Sky Blue 300
+    "#93C5FD", // Blue 300
+    "#38BDF8", // Sky Blue 400
+    "#60A5FA", // Blue 400
+    "#22D3EE", // Cyan 400
+  ];
+
   return (
     <section ref={containerRef} id="my-work" className={styles.scrollContainer} data-nav-theme="dark">
       <div className={styles.shaderContainer}>
@@ -50,20 +59,24 @@ export function WorkSection() {
             <div key={category} className={styles.categorySection}>
               <h3 className={styles.categoryTitle}>{category}</h3>
               <div className={styles.projectsList}>
-                {items.map((project, index) => (
-                  <a 
-                    key={index} 
-                    href={project.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={styles.projectCard}
-                  >
-                    <div className={styles.cardTop}>
-                      <div className={styles.titleWrapper}>
-                        <h4 className={styles.projectTitleOriginal}>{project.title}</h4>
-                        <h4 className={styles.projectTitleHover}>{project.title}</h4>
+                {items.map((project, index) => {
+                  const accent = ACCENT_COLORS[index % ACCENT_COLORS.length];
+                  
+                  return (
+                    <a 
+                      key={index} 
+                      href={project.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={styles.projectCard}
+                      style={{ "--accent": accent } as React.CSSProperties}
+                    >
+                      <div className={styles.cardTop}>
+                        <div className={styles.titleWrapper}>
+                          <h4 className={styles.projectTitleOriginal}>{project.title}</h4>
+                          <h4 className={styles.projectTitleHover}>{project.title}</h4>
+                        </div>
                       </div>
-                    </div>
                     
                     <div className={styles.expandedArea}>
                       <div className={styles.expandedInner}>
@@ -76,7 +89,8 @@ export function WorkSection() {
                       </div>
                     </div>
                   </a>
-                ))}
+                );
+              })}
               </div>
             </div>
           ))}

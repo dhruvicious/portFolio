@@ -82,7 +82,7 @@
 }
 
 .projectCard {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
   padding: 2rem 2rem;
   cursor: pointer;
   display: flex;
@@ -97,7 +97,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-color: #050505;
+  background-color: var(--accent, #050505);
   z-index: 0;
   opacity: 1;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -109,7 +109,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(10, 10, 10, 0.75);
+  background: rgba(125, 211, 252, 0.75);
   backdrop-filter: blur(16px) saturate(1.35);
   -webkit-backdrop-filter: blur(16px) saturate(1.35);
   z-index: 0;
@@ -155,7 +155,7 @@
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   line-height: 1.1;
   padding-bottom: 0.1em; /* Prevent clipping of descenders */
-  color: white; /* Always white */
+  color: #0F172A; /* Slate 900 */
 }
 
 .projectTitleOriginal {
@@ -223,7 +223,7 @@
 .projectSubtitle {
   font-size: 1.2rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(15, 23, 42, 0.6);
   margin: 0;
   transform: translateY(20px);
   opacity: 0;
@@ -234,7 +234,7 @@
 .projectCard:hover .projectSubtitle {
   transform: translateY(0);
   opacity: 1;
-  color: white;
+  color: #0F172A;
   transition-delay: 0.05s;
 }
 
@@ -248,7 +248,7 @@
 .projectDescription {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(15, 23, 42, 0.6);
   margin: 0;
   transform: translateY(30px);
   opacity: 0;
@@ -260,7 +260,7 @@
 .projectCard:hover .projectDescription {
   transform: translateY(0);
   opacity: 1;
-  color: white;
+  color: #0F172A;
   transition-delay: 0.15s;
 }
 

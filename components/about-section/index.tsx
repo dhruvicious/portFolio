@@ -1,27 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { AboutCrawl } from "@/components/about-crawl";
 import { VideoScrollSequence } from "@/components/video-scroll";
 
-export function AboutSection() {
-  const [aboutParagraphs, setAboutParagraphs] = useState<string[]>([]);
+interface AboutSectionProps {
+  paragraphs: string[];
+}
 
-  useEffect(() => {
-    fetch('/about.md')
-      .then((res) => res.text())
-      .then((text) => {
-        const paras = text.split('\n\n').map(p => p.trim()).filter(Boolean);
-        setAboutParagraphs(paras);
-      })
-      .catch(console.error);
-  }, []);
-
-  if (aboutParagraphs.length === 0) return null;
+export function AboutSection({ paragraphs }: AboutSectionProps) {
+  if (!paragraphs || paragraphs.length === 0) return null;
 
   return (
     <section id="about-me">
-      <AboutCrawl title="ABOUT ME" paragraphs={aboutParagraphs} />
+      <AboutCrawl title="ABOUT ME" paragraphs={paragraphs} />
       <VideoScrollSequence />
     </section>
   );
