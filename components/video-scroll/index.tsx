@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, useMemo } from "react";
+import { useInView } from "@/lib/use-in-view";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -186,6 +187,8 @@ export function VideoScrollSequence() {
   const [isCubeExpanded, setIsCubeExpanded] = useState(false);
   const scrollProgressRef = useRef(0);
 
+  const { ref: cubeGateRef, isInView: isCubeVisible } = useInView({ rootMargin: "200px 0px", unmountOnLeave: true });
+
   useEffect(() => {
     if (isCubeExpanded) {
       const originalOverflow = document.body.style.overflow;
@@ -242,10 +245,10 @@ export function VideoScrollSequence() {
           if (entropyRef.current) entropyRef.current.innerText = "0x" + Math.random().toString(16).substring(2, 8).toUpperCase();
           if (cafRef.current) cafRef.current.innerText = (1.2 + p * 2.8).toFixed(1);
 
-          // ─── PHASE 1: Snail Title Stretch (0.0 - 0.2) ───
-          if (p < 0.2 && titleRef.current && titleInnerRef.current) {
+          // ─── PHASE 1: Snail Title Stretch (0.0 - 0.4) ───
+          if (p < 0.4 && titleRef.current && titleInnerRef.current) {
             titleRef.current.style.display = "block";
-            const localP = p / 0.2; 
+            const localP = p / 0.4; 
             
             const numChars = titleCharsRef.current.length;
             
@@ -326,10 +329,10 @@ export function VideoScrollSequence() {
             titleRef.current.style.display = "none";
           }
 
-          // ─── PHASE 2: Blurred Scroll (0.2 - 0.5) ───
-          if (p >= 0.2 && p < 0.5 && setARef.current) {
+          // ─── PHASE 2: Blurred Scroll (0.4 - 0.6) ───
+          if (p >= 0.4 && p < 0.6 && setARef.current) {
             setARef.current.style.display = "flex";
-            const localP = (p - 0.2) / 0.3;
+            const localP = (p - 0.4) / 0.2;
             
             const yOffset = (0.5 - localP) * 150; // Scroll through 150vh
             setARef.current.style.transform = `translate(-50%, calc(-50% + ${yOffset}vh))`;
@@ -353,10 +356,10 @@ export function VideoScrollSequence() {
             setARef.current.style.display = "none";
           }
 
-          // ─── PHASE 3: The Process Morph (0.5 - 0.75) ───
-          if (p >= 0.5 && p < 0.75 && processTitleRef.current && processInnerRef.current) {
+          // ─── PHASE 3: The Process Morph (0.6 - 0.8) ───
+          if (p >= 0.6 && p < 0.8 && processTitleRef.current && processInnerRef.current) {
             processTitleRef.current.style.display = "flex";
-            const localP = (p - 0.5) / 0.25;
+            const localP = (p - 0.6) / 0.2;
             
             const el = processInnerRef.current;
             
@@ -439,10 +442,10 @@ export function VideoScrollSequence() {
             processTitleRef.current.style.display = "none";
           }
 
-          // ─── PHASE 4: Sequential Reveal (0.75 - 1.0) ───
-          if (p >= 0.75 && setBRef.current) {
+          // ─── PHASE 4: Sequential Reveal (0.8 - 1.0) ───
+          if (p >= 0.8 && setBRef.current) {
             setBRef.current.style.display = "flex";
-            const localP = (p - 0.75) / 0.25;
+            const localP = (p - 0.8) / 0.2;
             
             const step = 1.0 / setBItemsRef.current.length;
             setBItemsRef.current.forEach((item, i) => {
@@ -470,12 +473,15 @@ export function VideoScrollSequence() {
   );
 
   return (
-    <div ref={containerRef} className={styles.relativeContainer} data-nav-theme="dark">
-      <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}>
-        <Canvas orthographic camera={{ position: [0, 0, 1], zoom: 1 }} dpr={[1, 1.5]}>
-          <ShaderBackground scrollProgressRef={scrollProgressRef} />
-        </Canvas>
-      </div>
+    <div 
+      ref={(el) => {
+        (containerRef as any).current = el;
+        if (cubeGateRef) (cubeGateRef as any).current = el;
+      }} 
+      className={styles.relativeContainer} 
+      data-nav-theme="dark"
+    >
+
 
       {/* PHASE 1: Snail Title */}
       <div
@@ -718,15 +724,17 @@ export function VideoScrollSequence() {
         }}
       >
         <div style={{ width: "100%", height: "100%", pointerEvents: "auto" }}>
-          <RubiksCube 
-            transparent={true} 
-            fullscreen={true} 
-            interactive={isCubeExpanded}
-            isExpanded={isCubeExpanded}
-            onExpand={() => setIsCubeExpanded(true)}
-            onClose={() => setIsCubeExpanded(false)}
-            scrollProgress={scrollProgressRef}
-          />
+          {(isCubeVisible || isCubeExpanded) && (
+            <RubiksCube 
+              transparent={true} 
+              fullscreen={true} 
+              interactive={isCubeExpanded}
+              isExpanded={isCubeExpanded}
+              onExpand={() => setIsCubeExpanded(true)}
+              onClose={() => setIsCubeExpanded(false)}
+              scrollProgress={scrollProgressRef}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -1,17 +1,14 @@
 "use client";
 
 import { useRef } from "react";
-import { Canvas } from "@react-three/fiber";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ShaderBackground } from "@/components/video-scroll";
 import styles from "./work-section.module.css";
 import projects from "../../lib/projects.json";
 
 export function WorkSection() {
   const containerRef = useRef<HTMLElement>(null);
-  const scrollProgressRef = useRef<number>(0);
 
   useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -19,11 +16,9 @@ export function WorkSection() {
       trigger: containerRef.current,
       start: "top bottom",
       end: "bottom top",
-      onUpdate: (self) => {
-        scrollProgressRef.current = self.progress;
-      }
     });
   }, { scope: containerRef });
+
   // Group projects by type
   const groupedProjects = projects.reduce((acc, project) => {
     const { type } = project;
@@ -45,15 +40,8 @@ export function WorkSection() {
 
   return (
     <section ref={containerRef} id="my-work" className={styles.scrollContainer} data-nav-theme="dark">
-      <div className={styles.shaderContainer}>
-        <div className={styles.shaderSticky}>
-          <Canvas orthographic camera={{ position: [0, 0, 1], zoom: 1 }} dpr={[1, 1.5]}>
-            <ShaderBackground scrollProgressRef={scrollProgressRef} />
-          </Canvas>
-        </div>
-      </div>
-
       <div className={styles.contentWrapper}>
+
         <div className={styles.categoriesContainer}>
           {Object.entries(groupedProjects).map(([category, items]) => (
             <div key={category} className={styles.categorySection}>

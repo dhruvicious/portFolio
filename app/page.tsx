@@ -8,6 +8,7 @@ import { WorkSection } from "@/components/work-section";
 import { ContactSection } from "@/components/contact-section";
 import { PageManager } from "@/components/page-manager";
 import styles from "./page.module.css";
+import { GlobalBackgroundWrapper } from "@/components/global-background-wrapper";
 
 export default function Home() {
   // 1. Extreme Optimization: Read the file strictly on the server at build/request time
@@ -20,9 +21,11 @@ export default function Home() {
       <StarWarsIntroText />
       <div className={styles.page}>
         <HeroSection />
-        <AboutSection paragraphs={aboutParagraphs} />
-        <WorkSection />
-        <ContactSection />
+        <GlobalBackgroundWrapper>
+          <AboutSection paragraphs={aboutParagraphs} />
+          <WorkSection />
+          <ContactSection />
+        </GlobalBackgroundWrapper>
         <Navbar />
       </div>
     </PageManager>

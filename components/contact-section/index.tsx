@@ -6,8 +6,6 @@ import { Instagram, Search } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Canvas } from "@react-three/fiber";
-import { ShaderBackground } from "@/components/video-scroll";
 import socialsData from "@/lib/socials.json";
 
 const LinkedinIcon = (props: any) => (
@@ -110,6 +108,7 @@ export function ContactSection() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
   const scrollProgressRef = useRef<number>(0);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   const handleMouseEnter = (id: string) => {
     if (!isAnimationComplete.current) return; // Prevent resizing during drawing
@@ -521,13 +520,7 @@ export function ContactSection() {
 
   return (
     <section ref={containerRef} id="contact-me" className={styles.sectionContact} data-nav-theme="dark">
-      <div className={styles.shaderContainer}>
-        <div className={styles.shaderSticky}>
-          <Canvas orthographic camera={{ position: [0, 0, 1], zoom: 1 }} dpr={[1, 1.5]}>
-            <ShaderBackground scrollProgressRef={scrollProgressRef} />
-          </Canvas>
-        </div>
-      </div>
+
 
       <div 
         className={styles.headerContainer} 

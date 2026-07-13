@@ -1,28 +1,12 @@
 .scrollContainer {
   position: relative;
   width: 100%;
-  padding: 6rem 0;
-  background-color: #000;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  background-color: transparent;
 }
 
-.shaderContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  clip-path: inset(0); /* Bulletproof crop for fixed children */
-}
 
-.shaderSticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-}
 
 .contentWrapper {
   position: relative;
