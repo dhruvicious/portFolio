@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./work-section.module.css";
 import projects from "../../lib/projects.json";
+import { FigmaWorksAnimation } from "@/components/figma-works-animation";
 
 export function WorkSection() {
   const containerRef = useRef<HTMLElement>(null);
@@ -41,7 +42,7 @@ export function WorkSection() {
   return (
     <section ref={containerRef} id="my-work" className={styles.scrollContainer} data-nav-theme="dark">
       <div className={styles.contentWrapper}>
-
+        <FigmaWorksAnimation />
         <div className={styles.categoriesContainer}>
           {Object.entries(groupedProjects).map(([category, items]) => (
             <div key={category} className={styles.categorySection}>
@@ -49,12 +50,12 @@ export function WorkSection() {
               <div className={styles.projectsList}>
                 {items.map((project, index) => {
                   const accent = ACCENT_COLORS[index % ACCENT_COLORS.length];
-                  
+
                   return (
-                    <a 
-                      key={index} 
-                      href={project.link} 
-                      target="_blank" 
+                    <a
+                      key={index}
+                      href={project.link}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className={styles.projectCard}
                       style={{ "--accent": accent } as React.CSSProperties}
@@ -65,7 +66,7 @@ export function WorkSection() {
                           <h4 className={styles.projectTitleHover}>{project.title}</h4>
                         </div>
                       </div>
-                    
+
                     <div className={styles.expandedArea}>
                       <div className={styles.expandedInner}>
                         <div className={styles.leftCol}>
