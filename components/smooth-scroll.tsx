@@ -30,17 +30,20 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       snap.addElement(el as HTMLElement, { align });
     });
 
+    let animationFrameId = 0;
+
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      animationFrameId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    animationFrameId = requestAnimationFrame(raf);
 
     // Expose lenis globally so components can programmatically snap
     (window as any).__lenis = lenis;
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       snap.destroy();
       lenis.destroy();
       (window as any).__lenis = null;

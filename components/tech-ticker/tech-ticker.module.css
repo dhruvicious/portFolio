@@ -75,7 +75,7 @@
 .falconOverlay {
   position: absolute;
   top: 50%;
-  left: 120vw; /* start off-screen right */
+  left: 120%; /* start off-screen right */
   /* Point LEFT (assuming the raw SVG points UP, -90deg faces left) */
   transform: translateY(-50%) rotate(-90deg);
   z-index: 200;
@@ -92,7 +92,7 @@
 
 @keyframes zipAcrossRightToLeft {
   0% {
-    left: 100vw; /* Start exactly at the right edge, no delay! */
+    left: 100%; /* Start exactly at the right edge, no delay! */
   }
   100% {
     left: -200px; /* Fly off-screen left */

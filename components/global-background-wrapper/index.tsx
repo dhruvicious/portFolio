@@ -26,7 +26,7 @@ export function GlobalBackgroundWrapper({ children }: { children: React.ReactNod
   }, { scope: containerRef });
 
   return (
-    <div ref={containerRef} style={{ position: "relative", backgroundColor: "#000" }}>
+    <div ref={containerRef} style={{ position: "relative", overflow: "clip", backgroundColor: "#000" }}>
       <div 
         ref={canvasGateRef}
         style={{
@@ -40,7 +40,7 @@ export function GlobalBackgroundWrapper({ children }: { children: React.ReactNod
           clipPath: "inset(0)"
         }}
       >
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh" }}>
+        <div style={{ position: "fixed", inset: 0 }}>
           {isCanvasVisible && (
             <Canvas orthographic camera={{ position: [0, 0, 1], zoom: 1 }} dpr={[1, 1.5]}>
               <ShaderBackground scrollProgressRef={scrollProgressRef} />

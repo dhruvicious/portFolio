@@ -18,9 +18,10 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 interface AboutCrawlProps {
   title: string;
   paragraphs: string[];
+  techStack: string[];
 }
 
-export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
+export function AboutCrawl({ title, paragraphs, techStack }: AboutCrawlProps) {
   const containerRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [showTab, setShowTab] = useState(false);
@@ -241,7 +242,7 @@ export function AboutCrawl({ title, paragraphs }: AboutCrawlProps) {
         </div>
 
         {/* The tech stack ticker that appears at the bottom after scrolling */}
-        <TechTicker visible={showTicker} />
+        <TechTicker visible={showTicker} techStack={techStack} />
       </div>
     </section>
   );

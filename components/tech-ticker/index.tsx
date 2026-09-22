@@ -1,28 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./tech-ticker.module.css";
 
 interface TechTickerProps {
   visible: boolean;
+  techStack: string[];
 }
 
-export function TechTicker({ visible }: TechTickerProps) {
+export function TechTicker({ visible, techStack }: TechTickerProps) {
   const [animationKey, setAnimationKey] = useState(0);
-  const [techStack, setTechStack] = useState<string[]>([]);
-
-  // Fetch the tech stack from the markdown file on mount
-  useEffect(() => {
-    fetch('/tech-stack.md')
-      .then(res => res.text())
-      .then(text => {
-        // Split by newlines, trim whitespace, and filter out empty lines
-        const stack = text.split('\n').map(t => t.trim()).filter(Boolean);
-        if (stack.length > 0) {
-          setTechStack(stack);
-        }
-      })
-      .catch(console.error);
-  }, []);
 
   // Every time the ticker becomes visible, we increment the key
   // This forces React to unmount and remount the track,
@@ -76,4 +62,3 @@ export function TechTicker({ visible }: TechTickerProps) {
     </div>
   );
 }
-

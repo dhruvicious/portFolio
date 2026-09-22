@@ -99,6 +99,18 @@
 }
 
 @layer base {
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    html {
+        max-width: 100%;
+        overflow-x: hidden;
+        overflow-x: clip;
+    }
+
     * {
         @apply border-border outline-ring/50;
         /* Make text globally unselectable */
@@ -109,10 +121,24 @@
     }
     body {
         @apply bg-background text-foreground transition-colors duration-700;
+        width: 100%;
+        max-width: 100%;
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        overflow-x: clip;
         background-image: url("/ChecksBackground.jpg");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
     }
 }

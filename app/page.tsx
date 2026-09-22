@@ -15,6 +15,8 @@ export default function Home() {
   // This completely eliminates the client-side fetch waterfall that was delaying the render.
   const aboutText = fs.readFileSync(path.join(process.cwd(), 'public', 'about.md'), 'utf-8');
   const aboutParagraphs = aboutText.split('\n\n').map(p => p.trim()).filter(Boolean);
+  const techStackText = fs.readFileSync(path.join(process.cwd(), 'public', 'tech-stack.md'), 'utf-8');
+  const techStack = techStackText.split('\n').map(item => item.trim()).filter(Boolean);
 
   return (
     <PageManager>
@@ -22,7 +24,7 @@ export default function Home() {
       <div className={styles.page}>
         <HeroSection />
         <GlobalBackgroundWrapper>
-          <AboutSection paragraphs={aboutParagraphs} />
+          <AboutSection paragraphs={aboutParagraphs} techStack={techStack} />
           <WorkSection />
           <ContactSection />
         </GlobalBackgroundWrapper>

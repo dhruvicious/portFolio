@@ -1,13 +1,11 @@
 "use client";
 
-import { useRef, useEffect, useState, useMemo } from "react";
-import { useInView } from "@/lib/use-in-view";
+import { useRef, useMemo } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Canvas, useThree, useFrame } from "@react-three/fiber";
+import { useThree, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { RubiksCube } from "@/components/rubiks-cube";
 import styles from "./video-scroll.module.css";
 
 export function ShaderBackground({ scrollProgressRef }: { scrollProgressRef: React.MutableRefObject<number> }) {
@@ -183,22 +181,6 @@ export function VideoScrollSequence() {
   const setBItemsRef = useRef<(HTMLDivElement | null)[]>([]);
   const setBTexts = ["I THINK", "I CODE", "I BREAK", "I FIX"];
 
-  // Easter Egg State
-  const [isCubeExpanded, setIsCubeExpanded] = useState(false);
-  const scrollProgressRef = useRef(0);
-
-  const { ref: cubeGateRef, isInView: isCubeVisible } = useInView({ rootMargin: "200px 0px", unmountOnLeave: true });
-
-  useEffect(() => {
-    if (isCubeExpanded) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = originalOverflow;
-      };
-    }
-  }, [isCubeExpanded]);
-
   useGSAP(
     () => {
       const container = containerRef.current;
@@ -218,8 +200,6 @@ export function VideoScrollSequence() {
         end: "+=600%", // Long pin for complex sequence
         onUpdate: (self) => {
           const p = self.progress;
-          scrollProgressRef.current = p;
-
           // HUD Updates
           if (worksTargetRef.current && aboutTargetRef.current) {
             if (self.direction === 1) {
@@ -474,10 +454,7 @@ export function VideoScrollSequence() {
 
   return (
     <div 
-      ref={(el) => {
-        (containerRef as any).current = el;
-        if (cubeGateRef) (cubeGateRef as any).current = el;
-      }} 
+      ref={containerRef}
       className={styles.relativeContainer} 
       data-nav-theme="dark"
     >
@@ -654,9 +631,8 @@ export function VideoScrollSequence() {
         className={styles.hudOverlay} 
         style={{ 
           zIndex: 10,
-          opacity: isCubeExpanded ? 0 : 1,
-          pointerEvents: isCubeExpanded ? "none" : "auto",
-          transition: "opacity 0.4s ease"
+          opacity: 1,
+          pointerEvents: "none"
         }}
       >
         {/* Top Left - System Core */}
@@ -704,37 +680,6 @@ export function VideoScrollSequence() {
               ABOUT ME
             </span>
           </div>
-        </div>
-      </div>
-
-      {/* Easter Egg: The Actual Interactive Cube */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          zIndex: 9999,
-          pointerEvents: "none",
-          backgroundColor: isCubeExpanded ? "rgba(0, 0, 0, 0.6)" : "transparent",
-          backdropFilter: isCubeExpanded ? "blur(12px)" : "none",
-          WebkitBackdropFilter: isCubeExpanded ? "blur(12px)" : "none",
-          transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
-      >
-        <div style={{ width: "100%", height: "100%", pointerEvents: "auto" }}>
-          {(isCubeVisible || isCubeExpanded) && (
-            <RubiksCube 
-              transparent={true} 
-              fullscreen={true} 
-              interactive={isCubeExpanded}
-              isExpanded={isCubeExpanded}
-              onExpand={() => setIsCubeExpanded(true)}
-              onClose={() => setIsCubeExpanded(false)}
-              scrollProgress={scrollProgressRef}
-            />
-          )}
         </div>
       </div>
     </div>
